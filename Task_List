@@ -2,11 +2,11 @@
 ## TODO
 -Read and refer back to zybooks and articles on tries
 -create file-setup in github
--create .csv file for program to read from in test file
 -create list of function headers in the .h
 -write class declarations & definitions
--create test file
+-create test file and set up the test suite
 -write functions in .cpp for CIRT
 -create final documentation (video walkthrough, update the readme)
 ## Completed
 -create repository
+-create .csv file for program to read in form adn populate with a few test cases
