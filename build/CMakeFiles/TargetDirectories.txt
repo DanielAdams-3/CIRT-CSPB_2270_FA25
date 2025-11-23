@@ -1,0 +1,5 @@
+/home/jovyan/2270/CIRT-CSPB_2270_FA25/build/CMakeFiles/run_tests.dir
+/home/jovyan/2270/CIRT-CSPB_2270_FA25/build/CMakeFiles/run_app.dir
+/home/jovyan/2270/CIRT-CSPB_2270_FA25/build/CMakeFiles/test.dir
+/home/jovyan/2270/CIRT-CSPB_2270_FA25/build/CMakeFiles/edit_cache.dir
+/home/jovyan/2270/CIRT-CSPB_2270_FA25/build/CMakeFiles/rebuild_cache.dir
