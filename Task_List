@@ -1,12 +1,12 @@
 # Task list
 ## TODO
--Read and refer back to zybooks and articles on tries
--create file-setup in github
--create list of function headers in the .h
--write class declarations & definitions
+-write class declarations & finish adding definitions
 -create test file and set up the test suite
--write functions in .cpp for CIRT
+-write function definitions in .cpp files
+-set up the input and output streams
+-format the output so it looks nice when it outputs to the command line
 -create final documentation (video walkthrough, update the readme)
 ## Completed
 -create repository
 -create .csv file for program to read in form adn populate with a few test cases
+-create file-set up in github
