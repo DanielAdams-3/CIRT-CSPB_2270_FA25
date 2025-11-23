@@ -27,80 +27,104 @@ protected:
 };
 
 TEST_F(test_Trie, SetGetRoot) {
-  trie* a=new trie();
+  trie a = trie();
   trieNode* new_root = new trieNode();
-  a->setRoot(new_root);
-  ASSERT_EQ(a->getRoot(), new_root);
+  a.setRoot(new_root);
+  ASSERT_EQ(a.getRoot(), new_root);
 };
 
 TEST_F(test_Trie, readData) {
-  trie* a=new trie();
+  trie a= trie();
   string file_name="../code/test_cirt_data.csv";
-  vector<Course*> new_vector = a->readData(file_name);
+  vector<Course*> new_vector = a.readData(file_name);
   ASSERT_EQ(new_vector.size(), 5);
+  for (long unsigned int i=0;i<new_vector.size();i++)
+  {
+    Course* course=new_vector.at(i);
+    cout << course->getCourseSubjectCode() << endl;
+    cout << "Course Title" << endl;
+    cout << course->getCourseTitle() << endl;
+    cout << "Course Description" << endl;
+    cout << course->getCourseDescription() << endl;
+    cout << "Course Notes: " << endl;
+    cout << course->getCourseNotes() << endl;
+    cout << "Credit Hours: " << endl;
+    cout << course->getCreditHours() << endl;
+    cout << "Registration Restrictions: " << endl;
+    cout << course->getRegRestricts() << endl;
+    cout << "FIXME - PLANSnREQS" << endl;
+    //missing skills learnt
+  }
 };
 
 TEST_F(test_Trie, createCourseFunction)
 {
-  trie* a = new trie();
+  trie a = trie();
   string file_name="../code/test_cirt_data.csv";
-  vector<Course*> new_vector = a->readData(file_name);
+  vector<Course*> new_vector = a.readData(file_name);
 };
 
 TEST_F(test_Trie, searchTrie)
 {
-  trie* a = new trie();
+  trie a = trie();
   trieNode* root_node= new trieNode();
-  a->setRoot(root_node);
+  a.setRoot(root_node);
 
   //string file_name="../code/test_cirt_data.csv";
-  a->buildTrie();
-  a->searchTrie("CSCI-5253");
-  ASSERT_EQ(a->searchTrie("CSCI-5253"), true);
+  a.buildTrie();
+  a.searchTrie("CSCI-5253");
+  ASSERT_EQ(a.searchTrie("CSCI-5253"), true);
 };
 
 
 TEST_F(test_Trie, insertNode)
 {
-  trie* a = new trie();
+  trie a = trie();
   trieNode* root_node= new trieNode();
-  a->setRoot(root_node);
+  a.setRoot(root_node);
 
-  a->buildTrie();
-  bool answer = a->searchTrie("CSCI-5253");
+  a.buildTrie();
+  bool answer = a.searchTrie("CSCI-5253");
   ASSERT_EQ(answer, true); //lets us know it is successfully added
 
 }; 
 
 TEST_F(test_Trie, removeNode)
 {
-  trie* a = new trie();
+  trie a = trie();
   trieNode* root_node= new trieNode();
-  a->setRoot(root_node);
+  a.setRoot(root_node);
 
-  a->buildTrie(); //RESOLVED -- error here, out of range for vector somehow? is vector not declared? - out of range, with '0'
+  a.buildTrie(); //RESOLVED -- error here, out of range for vector somehow? is vector not declared? - out of range, with '0'
   bool answer=true;
-  a->removeNode("CSCI-5253");
-  answer=a->searchTrie("CSCI-5253");
-  ASSERT_EQ(answer, false); //let sus know it's removed successfully
+  a.removeNode("CSCI-5253");
+  answer=a.searchTrie("CSCI-5253");
+  ASSERT_EQ(answer, false); //lets us know it's removed successfully
 }; 
 
 TEST_F(test_Trie, buildTrie)
 {
-  trie* a = new trie();
+  trie a = trie();
   trieNode* root_node = new trieNode();
-  a->setRoot(root_node);
+  a.setRoot(root_node);
 
   //REFLECTION mistake - buildTrie already builds based on the data we read in.
 
-  a->buildTrie();
-  //cout << "Trie built. testing with searches" << endl;
-  //out << "Search for CSCI-5253" << endl;
-  bool answer=a->searchTrie("CSCI-5253");
+  a.buildTrie();
+  bool answer=a.searchTrie("CSCI-5253");
   ASSERT_EQ(answer,true);
-
 };
 
+TEST_F(test_Trie, SetGetNumWords)
+{
+  trie a = trie();
+  trieNode* root_node = new trieNode();
+  a.setRoot(root_node);
+
+  a.buildTrie();
+  int test_numWords=a.getNumWords();
+  ASSERT_EQ(test_numWords,5);
+};
 
 // Unit Tests - Node
 class test_TrieNode : public ::testing::Test{
@@ -116,6 +140,13 @@ TEST_F(test_TrieNode, SetGetLeafStatus) {
   ASSERT_EQ(a->getLeafStatus(), true);
   ASSERT_EQ(base->getLeafStatus(), false);
 };
+
+TEST_F(test_TrieNode, SetGetDeleted) {
+  trieNode* first = new trieNode();
+  first->markDeletion(true);
+  ASSERT_EQ(first->getDeleteStatus(), true);
+};
+
 TEST_F(test_TrieNode, SetGetPredecessor) {
   trieNode* second = new trieNode();
   trieNode* first = new trieNode();
@@ -157,7 +188,8 @@ TEST_F(test_Course, Constructor) {
   ASSERT_EQ(new_course->courseDescription,"");
   ASSERT_EQ(new_course->courseNotes,""); //from classes.colorado.edu
   ASSERT_EQ(new_course->courseTitle,""); //catalog, etc.
-  ASSERT_EQ(new_course->skillsLearnt,""); //from 3. Skills Learnt;
+  ASSERT_EQ(new_course->regRestricts, "");
+  //ASSERT_EQ(new_course->skillsLearnt,""); //from 3. Skills Learnt;
   ASSERT_EQ(new_course->plansNreqs.size(),0); //from Daniel's brain
   ASSERT_EQ(new_course->courseHours,"");
 };
@@ -171,17 +203,18 @@ TEST_F(test_Course, GetSetfunctions) {
   string description="This is a course description.";
   string notes="Section 002: restricted to ROBO students.";
   string subjectCode="CSCI-5253";
-  string skills="hadoop, and some other skills.";
+  string restricts="Restricted to grad students only.";
   string degreeplans="CSEN-MS: Electives, Bin 3; CSEN-MSCPS: Electives, Bin 3";
   string credithrs="3";
-  new_course->setCourseInfo(title, description, notes, subjectCode,skills,degreeplans,credithrs);
+  new_course->setCourseInfo(title, description, notes, subjectCode,restricts,degreeplans,credithrs);
   ASSERT_EQ(new_course->getCourseTitle(),title);
   ASSERT_EQ(new_course->getCourseDescription(),description);
   ASSERT_EQ(new_course->getCourseNotes(),notes);
   ASSERT_EQ(new_course->getCourseSubjectCode(),subjectCode);
-  ASSERT_EQ(new_course->getSkillsLearnt(),skills);
+  ASSERT_EQ(new_course->getRegRestricts(),restricts);
   ASSERT_EQ(new_course->getCreditHours(),"3");
   ASSERT_EQ(new_course->plansNreqs.size(),2);
+  //need one for skills
 };
 
 /*

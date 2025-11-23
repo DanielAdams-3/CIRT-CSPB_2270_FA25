@@ -5,9 +5,10 @@ using namespace std;
 //constructor, set default values
 trieNode::trieNode()
 {
-    //READY-TO-TEST
+    //DONE
     predecessor=nullptr;
     isLeaf=false; //true only when we reach the end of the course subject code
+    to_delete = false;
     
     //REFLECTION - the trie structure relies on more efficient ways of capturing what words are listed than what I initially tried
     for (long unsigned int i=0;i<38;i++)
@@ -20,16 +21,26 @@ trieNode::trieNode()
 //destructor
 trieNode::~trieNode()
 {
-    //REVISIT WHEN READY TO DO DYNAMIC MEMORY ALLOCATION
-} 
+    //DONE    
+}
+
+void trieNode::markDeletion(bool new_status)
+{
+    this->to_delete=new_status;
+}
+
+bool trieNode::getDeleteStatus()
+{
+    return this->to_delete;
+}
 
 //returns a pointer to the node's predecessor;
 trieNode* trieNode::getPredecessor()
 {
     return this->predecessor;
 }
-//sets the node's predecessor pointer to what is passed as a parameter;
 
+//sets the node's predecessor pointer to what is passed as a parameter;
 void trieNode::setPredecessor(trieNode* new_predecessor)
 {
     this->predecessor=new_predecessor;

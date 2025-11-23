@@ -9,14 +9,21 @@ class trieNode {
         trieNode* predecessor;
         bool isLeaf; //true only when we reach the end of the course subject code
         Course* coursePtr; //for leaf node's only, to point at a dynamically allocated course object
+        bool to_delete;
+        
 
     public:
         vector<trieNode*> descendants; //27 characters long, index 0 = '-' and rest are all capitals
 
         trieNode(); //constructor
         ~trieNode(); //destructor
+
+        void markDeletion(bool new_status);
+        bool getDeleteStatus();
+
         trieNode* getPredecessor();
         void setPredecessor(trieNode* new_predecessor); //use right after initializing a new node
+        
         bool getLeafStatus();
         void setLeafStatus(bool leaf_val);
         

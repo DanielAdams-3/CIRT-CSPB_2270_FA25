@@ -5,13 +5,14 @@ using namespace std;
 //constructor, set variables to empty string, false and nullptr;
 Course::Course()
 {
-    //TESTED
+    //DONE
     courseSubjectCode="";
     courseDescription="";
     courseNotes = ""; //from classes.colorado.edu
     courseTitle = ""; //catalog, etc.
-    skillsLearnt = ""; //from 3. Skills Learnt;
+    regRestricts = ""; 
     courseHours="";
+    //skills //from 3. Skills Learnt; 
 } 
 
 //destructor
@@ -21,14 +22,14 @@ Course::~Course()
 } 
 
 //returns all course info
-void Course::getCourseInfo(string& title, string& description, string& notes, string& subjectCode, string& skillsLearnt, map<string,string>& plansandreqs, string& numHours)
+void Course::getCourseInfo(string& title, string& description, string& notes, string& subjectCode, string& restricts, map<string,string>& plansandreqs, string& numHours)
 {
-    //READY-TO-CHECK
+    //DONE
     title=getCourseTitle();
     description=getCourseDescription();
     notes=getCourseNotes();
     subjectCode=getCourseSubjectCode();
-    skillsLearnt=getSkillsLearnt();
+    restricts=getRegRestricts();
     plansandreqs=*getPlansAndReqs();
     courseHours=getCreditHours();
 }  
@@ -53,10 +54,15 @@ string Course::getCourseTitle()
 {
     return this->courseTitle;
 }
+string Course::getRegRestricts()
+{
+    return this->regRestricts;
+}
+/*
 string Course::getSkillsLearnt()
 {
     return this->skillsLearnt;
-}
+}*/
 
 string Course::getCreditHours()
 {
@@ -70,23 +76,24 @@ string Course::getCreditHours()
 
 map<string,string>* Course::getPlansAndReqs()
 {
-    //READY-TO-TEST
+    //DONE
     return &this->plansNreqs;
 }
 
 //use C++ strings here, this is where we read in information for each course. - make life easy, just call each individual setter function
-void Course::setCourseInfo(string new_title, string new_description, string new_notes, string new_subjectCode, string new_skillsLearnt, string new_plans, string num_hours)
+void Course::setCourseInfo(string new_title, string new_description, string new_notes, string new_subjectCode, string new_restricts, string new_plans, string num_hours)
 {
-    //READY-TO-TEST
+    //DONE
     setCourseTitle(new_title); 
     setCourseDescription(new_description);
     setCourseNotes(new_notes);
     setCourseSubjectCode(new_subjectCode);
-    setSkillsLearnt(new_skillsLearnt);
+    setRegRestricts(new_restricts);
+    //setSkillsLearnt(new_skillsLearnt);
     setPlansandReqs(new_plans);
     setCreditHours(num_hours);
 } 
-//called by setCourseInfo;
+//the following helpers are all called by setCourseInfo;
 void Course::setCreditHours(string num_hours)
 {
     this->courseHours=num_hours;
@@ -107,15 +114,20 @@ void Course::setCourseTitle(string new_title)
 {
     this->courseTitle=new_title;
 }
+void Course::setRegRestricts(string new_restricts)
+{
+    this->regRestricts = new_restricts;
+}
+/*
 void Course::setSkillsLearnt(string new_skills)
 {
     this->skillsLearnt=new_skills;
-}
+}*/
 void Course::setPlansandReqs(string degreePlansAndReqs)
 //https://learn.zybooks.com/zybook/COLORADOCSPB2270DataStructuresGuinnFall2025/chapter/14/section/1
 //https://www.geeksforgeeks.org/cpp/map-insert-in-c-stl/
 {
-    //break up the string by ';' using getline
+    //currently, string broken up by ';' and ':'
     stringstream ss;
     ss<<degreePlansAndReqs; //puts the entire string into the stream
     while (ss.eof() != true)
@@ -124,7 +136,6 @@ void Course::setPlansandReqs(string degreePlansAndReqs)
         string map_value="";
         getline(ss,map_key,':');
         getline(ss,map_value,';');
-        //then for each pair, create a new map entry where
         this->plansNreqs.insert({map_key, map_value});
     }
 }

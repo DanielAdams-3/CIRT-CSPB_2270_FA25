@@ -5,18 +5,48 @@ using namespace std;
 //constructor, set default values
 trie::trie()
 {
-    //this->numWords=0;
-    this->root= new trieNode();
-
+    this->numWords=0;
+    trieNode* root= new trieNode();
+    this->setRoot(root);
 } 
 
 //destructor
 trie::~trie()
 {
-    //DYNAMIC MEMORY ALLOCATION - COME BACK AND FINISH LATER
-    //trieNode* cursor = this->root;
-    //delete this->root;
+    //DYNAMIC MEMORY ALLOCATION
+    vector<trieNode*> to_delete;
+    trieNode* cursor=this->getRoot();
+    treeDeleter(cursor, to_delete);
+    for (long unsigned int i=0;i<to_delete.size();i++)
+    {
+        trieNode* doom_node = to_delete.at(i);
+        delete doom_node;
+    }
 } 
+
+//recursively finds nodes to delete
+void trie::treeDeleter(trieNode* subtreeRoot, vector<trieNode*>& to_delete)
+{
+    //TODO
+    trieNode* cursor = subtreeRoot;
+    for (long unsigned int i=0;i<cursor->descendants.size();i++)
+    {
+        if (cursor->descendants.at(i) != nullptr)
+        {
+            if (cursor->descendants.at(i)->getDeleteStatus() != true) //ISSUE, ADDING EVERY NODE MULTIPLE TIMES
+            {
+                to_delete.push_back(cursor->descendants.at(i));
+                cursor->descendants.at(i)->markDeletion(true);
+                treeDeleter(cursor->descendants.at(i), to_delete);
+            }
+        }
+    }
+    if (cursor->getDeleteStatus() != true)
+    {
+        to_delete.push_back(cursor);
+        cursor->markDeletion(true);
+    }
+}
 
 void trie::setRoot(trieNode* new_root)
 {
@@ -29,30 +59,21 @@ trieNode* trie::getRoot()
     return this->root;
 }
 
-/*
-//returns the number of courses in the Trie recursively (sort of)
-int trie::getNumWords(trieNode* subtree_root)
+
+//returns the number of courses in the Trie
+int trie::getNumWords()
 {
-    trieNode* cursor=nullptr;
-    int counter = 0;
-    int subtree_counter=0;
-    if (subtree_root->getLeafStatus() != true)
-    {
-        for (long unsigned int i=0; i<subtree_root->descendants.size(); i++)
-        {
-            cursor=subtree_root->descendants.at(i);
-            subtree_counter = getNumWords(cursor);
-            counter+=subtree_counter;
-        }
-    }
-    return counter;
+    return this->numWords;
 } 
-*/
+
+void trie::setNumWords (int new_val)
+{
+    this->numWords=new_val;
+}
 
 bool trie::searchTrie(string course_to_find)
 {
     bool answer = false;
-    //TODO
     if (this->getRoot() == nullptr)
     {
         cout << "error, root not set" << endl;
@@ -107,8 +128,6 @@ bool trie::searchTrie(string course_to_find)
     return answer;
 }
 
-    //this function creates and inserts a new node into the tree in the tree
-    //if the searchTrie(string course_to_find) function returns false
 void trie::insertNode(Course* course_to_add)
 {
     bool node_exists=this->searchTrie(course_to_add->getCourseSubjectCode());
@@ -170,9 +189,11 @@ void trie::insertNode(Course* course_to_add)
     }
     cursor->setLeafStatus(true);
     cursor->setCoursePtr(course_to_add);
+    this->setNumWords(this->getNumWords() + 1);
 }
 
-//helper function
+//REFLECTION
+/*helper function - DELETE
 Course* trie::createCourse(string new_title, string new_description, string new_notes, string new_subj_code, string new_skills, string new_plans, string new_hours)
 {
     //DONE
@@ -180,13 +201,12 @@ Course* trie::createCourse(string new_title, string new_description, string new_
     course_ptr = new Course();
     course_ptr->setCourseInfo(new_title, new_description, new_notes, new_subj_code, new_skills, new_plans, new_hours);
     return course_ptr;
-}
+}*/
 
 
 void trie::removeNode(string doom_course_subject_code)
 {
     //DONE
-    //check if it's in there
     if (searchTrie(doom_course_subject_code) == false)
     {
         return;
@@ -204,6 +224,7 @@ void trie::removeNode(string doom_course_subject_code)
     int index = 0;
     while (ss.good() == true)
     {
+        index = 0;
         //CALCULATE THE INDEX OF THE CHARACTER
         if (current=='-') //special character
         {
@@ -221,7 +242,7 @@ void trie::removeNode(string doom_course_subject_code)
                 index = current - 'A';
             }
         }
-
+        /*GOT THIS OF THIS - PUT IT AFTER WE ARRIVE AT THE RIGHT LOCATION.
         //CHECK THE INDEXED THE LOCATION IS A POINTER OR NULLPTR - IF IT'S NULL, we should skip
         if (cursor->descendants.at(index) != nullptr) 
         {
@@ -233,28 +254,37 @@ void trie::removeNode(string doom_course_subject_code)
             {
                 predecessor->descendants.at(index) = nullptr;
             }
-        }
+        }*/
         //prep for next loop
-        ss.get(current);
-        index = 0;
+        if (cursor->descendants.at(index) != nullptr)
+        {
+            ss.get(current);
+            cursor=cursor->descendants.at(index);
+        }
     }
     
-    //verify we're in the right spot
+    //verify we're in the right spot and process
     if (cursor->getLeafStatus() == true)
     {
         Course* leafCoursePtr = cursor->getCoursePtr();
-        if (leafCoursePtr->getCourseSubjectCode() == doom_course_subject_code)
+        string leaf_course_code=leafCoursePtr->getCourseSubjectCode();
+        predecessor=cursor->getPredecessor();
+        if (leaf_course_code == doom_course_subject_code)
         {
-            delete leafCoursePtr;
             cursor->setLeafStatus(false);
+            predecessor->descendants.at(index)=nullptr;
+            cursor->setCoursePtr(nullptr);
+            this->setNumWords(this->getNumWords() - 1);
         }
     }
-    //keep checking predecessor nodes and deleting them IF and ONLY IF there ar no other node* in the descendants.
-    bool done = false;
+
+    //REFLECTION
+    //keep checking predecessor nodes and deleting them IF there are no other node* in the descendants.
+    //don't need to do this. may need to re-add, will be deleted all later anyway. 
+    /*bool done = false;
     int counter=0;
     while (!done)
     {
-
         //check the predecessor's descendants for other nodes, and to clear out this one
         for (long unsigned int i=0;i<predecessor->descendants.size();i++)
         {
@@ -288,7 +318,7 @@ void trie::removeNode(string doom_course_subject_code)
                 counter=0;
             }
         }
-    }
+    }*/
 }
 /*
 bool trie::startsWithPrefix(string prefix)
@@ -327,8 +357,7 @@ vector<Course*> trie::readData(string file_name)
 
         getline(readf, csv_line); //puts a full line from the file into line variable
         stringstream ss;  
-        ss<<csv_line; //put everything into the stream
-        //now we need to account for the headers.
+        ss<<csv_line; //put the line from the file into the stream
         string csv_cell="";
         string new_subj_code = "";
         string new_title="";
@@ -337,13 +366,19 @@ vector<Course*> trie::readData(string file_name)
         string new_notes="";
         string new_skills="";
         string new_plans="";
-        //now we can begin reading data - use the createCourse function!
+
+        //now we can begin reading data
         for (long unsigned int i=0;i<7;i++) //iterate through the line to get each cell's value and store into 
         {
-
             csv_cell="";
-            getline(ss,csv_cell,',');
-
+            char garbage = ' ';
+            char peek = ' ';
+            while (ss.peek() == ',' || ss.peek() == '\"' || ss.peek() == '\.')
+            {
+                ss.get(garbage);
+            }
+            getline(ss,csv_cell,'*');
+            
             //put the value in the right variable for the new Course
             if (i==0)
             {
@@ -372,12 +407,12 @@ vector<Course*> trie::readData(string file_name)
             else if (i==6)
             {
                 new_plans=csv_cell;
-                //if everything in place, we create the course here!
             }
         }
         if (new_subj_code != "")
         {
-            Course* new_course=this->createCourse(new_title, new_description, new_notes, new_subj_code, new_skills, new_plans, new_hours);
+            Course* new_course = new Course();
+            new_course->setCourseInfo(new_title, new_description, new_notes, new_subj_code, new_skills, new_plans, new_hours);
             courses_to_insert_into_trie.push_back(new_course);
         }
     }

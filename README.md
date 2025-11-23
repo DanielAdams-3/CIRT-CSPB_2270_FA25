@@ -1,11 +1,16 @@
 # CIRT-CSPB_2270_FA25
 -Repository for course projct for CSPB 2270, Fall 2025, Prof. Guinn, at CU Boulder. 
 About the requirements
--This repository is for my course project for CSPB 2270 Data Structures in Fall 2025. 
+-This repository is for my course project for CSPB 2270 Data Structures in Fall 2025.
+-The project must be submitted by December 4 at 11:59pm MT
+-Project must include a README or other project description, and/or a video walkthrough/explanation.
+-
+
 # Project Summary
 -Create a course information retrieval tool (CIRT), based on a trie (prefix tree) data structure.
-The project will output course information based on a user- provided input string (course subject code)
-## Project Goals - 
+The project will output course information based on a user- provided input string (course subject code).
+
+## Project Goals
 The goal is to create a rapid retrieval tool for pre-consolidated course information. CIRT
 will use a trie data structure, allowing a user to quickly access a comprehensive set of
 course information with one interface and limited interactions. The trie will store key-value
@@ -14,6 +19,7 @@ the relevant terminating node will be a Course object containing the stored cour
 information. CIRT should quickly output the course information for the course matching the
 user-provided subject code. If the course does not exist, the program will notify the user of
 the failed search and give these reasons.
+
 ## About Tries (Prefix Trees)
 A trie is a multi-pronged tree made up of nodes, each of which contains a string
 character and points to as few as zero child nodes and may point to more than two child
@@ -38,6 +44,10 @@ number of characters in the key. Since subject codes are limited to nine string 
 (see exception below), search will, in most cases, be quick.
 
 ## Limitations
+### Prefix-based Autocomplete
+A major benefift of Prefix trees is that auto-complete is easier to implement. For any number of characters provided, we can easily search the tree and return the first or all results that start with the provided characters, or nothing if not provided. I hope to add a secondary search feature that lets users input 
+
+### Section-differentiated courses
 A challenge in implementing the trie is the (rare) circumstance where multiple courses
 share a course title. For example, Special Topics courses share a subject code but have
 unique section-level titles. I plan to address this by adding Course object pointers to the
@@ -45,10 +55,16 @@ Special Topics node for each section. In initial implementation, CIRT will outpu
 data for each Special Topics section upon request. Time permitting, I will ask the user for
 input to isolate the desired section title and then output only the relevant section’s
 information.
+
+### Upgrading from Command-Line Interface to Front End Web Interface
 Time permitting, I will create a simple front-end, locally hosted web interface to
 facilitate a better user experience and given my lack of experience, I anticipate this to be a
 challenge. If I am unable to complete the interface by the due date, I will exclude it from the
 submitted version and work on it after the class ends.
+
+### Search-by-Title search option
+I hope to be able to add a search-by-title option. Instead of remaking a new trie, I would, within the trie structure, contain a 'dictionary' map structure where each course is added to the map, where the keys are the Course titles and the values are the subject codes. Then when the user provided the course title, I would search the map for a key, and if it existed, then call the search and output functions based on the 'value' of the found key:value pair, the course subject code.
+
 ## Technical/Learning Hurdles
 I need to learn how to implement a trie in C++, as this was not covered in a homework
 assignment. I also need to learn how to implement file streams to read the pre-
@@ -61,4 +77,4 @@ References & Resources
   zyBook CSPB 2270: Data Structures - 7.12 Tries
   zyBook CSPB 2270: C++ Refresher - 9.5, 9.6, 9.7 File input and output
   Wikipedia – Trie
-  Geeks4Geeks – Trie Data Structure
+  Geeks4Geeks – Trie Data Structures
