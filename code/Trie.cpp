@@ -280,28 +280,29 @@ vector<Course*> trie::readData(string file_name)
         string new_skills="";
         string new_plans="";
 
-        for (long unsigned int i=0;i<7;i++) //iterate through the line to get each cell's value and store into 
+        for (long unsigned int i=0;i<7;i++)
         {
             csv_cell="";
-            char garbage = ' ';
-            //we only want to start by reading characters that are regular
-            while (ss.peek() == '\"' || ss.peek() == ',' || ss.peek() == ' ')
+            getline(ss,csv_cell,'*');
+
+            //CLEAN-UP BEGINNING AND END OF STRINGS
+            char garbage = csv_cell.front();
+            while (garbage == '\"' || garbage == ',' || garbage == ' ')
             {
-                ss.get(garbage);
+                csv_cell.erase(0,1); //erase 1 character at position 0
+                garbage=csv_cell.front();
             }
 
-            getline(ss,csv_cell,'*');
-            
-            //put the value in the right variable for the new Course
+            garbage = csv_cell.back();
+            while (garbage == '\"' || garbage == ',' || garbage == ' ') 
+            {
+                csv_cell.pop_back();
+                garbage=csv_cell.back();
+            }
+
+            //store the string into the right variable to then initialize new Course object
             if (i==0)
             {
-                //TODO -- clear up the last x characters in each string?
-                /*
-                for (long unsigned int i=0;i<3;i++)
-                {
-                    if 
-                    if (new_subj_code.pop_back() == )
-                }*/
                 new_subj_code=csv_cell;
             }
             else if (i==1)
@@ -328,6 +329,10 @@ vector<Course*> trie::readData(string file_name)
             {
                 new_plans=csv_cell;
             }
+            //else if (i==7)
+            //{
+                //new_skills = csv_cell;
+            //}
         }
         if (new_subj_code != "")
         {
