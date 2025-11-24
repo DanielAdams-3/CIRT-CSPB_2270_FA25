@@ -41,19 +41,21 @@ TEST_F(test_Trie, readData) {
   for (long unsigned int i=0;i<new_vector.size();i++)
   {
     Course* course=new_vector.at(i);
-    cout << course->getCourseSubjectCode() << endl;
-    cout << "Course Title" << endl;
-    cout << course->getCourseTitle() << endl;
-    cout << "Course Description" << endl;
-    cout << course->getCourseDescription() << endl;
-    cout << "Course Notes: " << endl;
-    cout << course->getCourseNotes() << endl;
-    cout << "Credit Hours: " << endl;
-    cout << course->getCreditHours() << endl;
-    cout << "Registration Restrictions: " << endl;
-    cout << course->getRegRestricts() << endl;
-    cout << "FIXME - PLANSnREQS" << endl;
+    cout << course->getCourseSubjectCode() << " INFORMATION " << endl;
+    cout << "Course Title: " <<  course->getCourseTitle() << endl;
+    cout << "Course Description: " << course->getCourseDescription() << endl;
+    cout << "Course Notes: " << course->getCourseNotes() << endl;
+    cout << "Credit Hours: " << course->getCreditHours() << endl;
+    cout << "Registration Restrictions: " << course->getRegRestricts() << endl;
+    cout << "Degree Plan Requirements: " << endl;
+    map<string, string>* plansPTR = course->getPlansAndReqs();
+    for (auto i  = plansPTR->begin(); i!= plansPTR->end(); i++)
+    {
+      cout << i->first << ": " << i->second << endl;
+    }
+
     //missing skills learnt
+    
   }
 };
 
@@ -217,59 +219,7 @@ TEST_F(test_Course, GetSetfunctions) {
   //need one for skills
 };
 
-/*
-TEST_F(test_Graph, Graph_NodeGetDiscoInfo) {
-  Node* n(new Node("some node"));
-  n->color = GRAY;
-  n->discovery_time = 10;
-  n->completion_time = 18;
-  n->rank = 4;
-  int c, dt, ct, r;
-  n->getDiscoveryInformation(c, dt, ct, r);
-  ASSERT_EQ(c, GRAY);
-  add_points_to_grade(2);
-  ASSERT_EQ(dt, 10);
-  add_points_to_grade(2);
-  ASSERT_EQ(ct, 18);
-  add_points_to_grade(2);
-  ASSERT_EQ(r, 4);
-  add_points_to_grade(2);
-}
-
-TEST_F(test_Graph, Graph_TestIfNodeIsSpanningTreeAncestor) {
-  Node* a(new Node("a"));
-  Node* b(new Node("b"));
-  Node* c(new Node("c"));
-  Node* e(new Node("e"));
-  a->predecessor = NULL;
-  b->predecessor = a;
-  c->predecessor = a;
-  e->predecessor = c;
-
-  ASSERT_EQ(a->isAncestor(c), false);
-  add_points_to_grade(2);
-  ASSERT_EQ(c->isAncestor(a), true);
-  add_points_to_grade(2);
-  ASSERT_EQ(e->isAncestor(a), true);
-  add_points_to_grade(2);
-  ASSERT_EQ(e->isAncestor(b), false);
-  add_points_to_grade(2);
-}
-
-TEST_F(test_Graph, Graph_SetSpanningTreePredecessor) {
-  Node* a(new Node("a"));
-  Node* c(new Node("c"));
-  Node* e(new Node("e"));
-  c->setPredecessor(a);
-  e->setPredecessor(c);
-
-  ASSERT_EQ(c->predecessor, a);
-  add_points_to_grade(5);
-  ASSERT_EQ(e->predecessor, c);
-  add_points_to_grade(5);
-}
-
-TEST_F(test_Graph, Graph_DepthFirstSeartchNoTrarget) {
+/*TEST_F(test_Graph, Graph_DepthFirstSeartchNoTrarget) {
   Graph* g = mkgraph();
   g->clear();
   ASSERT_EQ(g->clock, 0);

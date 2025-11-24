@@ -372,17 +372,25 @@ vector<Course*> trie::readData(string file_name)
         {
             csv_cell="";
             char garbage = ' ';
-            char peek = ' ';
-            while (ss.peek() == ',' || ss.peek() == '\"' || ss.peek() == '\.')
+            //we only want to start by reading characters that are regular
+            while (ss.peek() == '\"' || ss.peek() == ',' || ss.peek() == ' ')
+            //optional conditions|| static_cast<int>(ss.peek()) < 58 && static_cast<int>(ss.peek()) >= 48
             {
                 ss.get(garbage);
             }
+
             getline(ss,csv_cell,'*');
             
             //put the value in the right variable for the new Course
             if (i==0)
             {
-                new_subj_code=csv_cell;
+                //clear up the last 2 characters in each string
+                new_subj_code=csv_cell;/*
+                for (long unsigned int i=0;i<3;i++)
+                {
+                    new_subj_code.
+                    if (new_subj_code.pop_back() == )
+                }*/
             }
             else if (i==1)
             {
