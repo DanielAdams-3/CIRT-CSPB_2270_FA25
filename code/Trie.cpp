@@ -27,13 +27,12 @@ trie::~trie()
 //recursively finds nodes to delete
 void trie::treeDeleter(trieNode* subtreeRoot, vector<trieNode*>& to_delete)
 {
-    //TODO
     trieNode* cursor = subtreeRoot;
     for (long unsigned int i=0;i<cursor->descendants.size();i++)
     {
         if (cursor->descendants.at(i) != nullptr)
         {
-            if (cursor->descendants.at(i)->getDeleteStatus() != true) //ISSUE, ADDING EVERY NODE MULTIPLE TIMES
+            if (cursor->descendants.at(i)->getDeleteStatus() != true) 
             {
                 to_delete.push_back(cursor->descendants.at(i));
                 cursor->descendants.at(i)->markDeletion(true);
@@ -52,25 +51,18 @@ void trie::setRoot(trieNode* new_root)
 {
     this->root = new_root;
 }
-
-//returns a pointer to the node parameter;
 trieNode* trie::getRoot()
 {
     return this->root;
 }
-
-
-//returns the number of courses in the Trie
 int trie::getNumWords()
 {
     return this->numWords;
 } 
-
 void trie::setNumWords (int new_val)
 {
     this->numWords=new_val;
 }
-
 bool trie::searchTrie(string course_to_find)
 {
     bool answer = false;
@@ -80,8 +72,7 @@ bool trie::searchTrie(string course_to_find)
         return answer;
     }
 
-    //set up a string stream to read the course
-    //for resetting and clearing if needed https://www.geeksforgeeks.org/cpp/stringstream-c-applications/
+    //set up a string stream to read the course 
     stringstream ss(course_to_find);
     char current;
     ss.get(current);
@@ -116,7 +107,7 @@ bool trie::searchTrie(string course_to_find)
             return answer;
         }
         //prep for next loop
-        cursor=cursor->descendants.at(index); //REFLECTION
+        cursor=cursor->descendants.at(index);
         ss.get(current);
         index = 0;
     }
@@ -143,9 +134,6 @@ void trie::insertNode(Course* course_to_add)
         this->setRoot(new_root);
     }
     trieNode* cursor=this->getRoot();
-
-    //set up a string stream to read the course
-    //for resetting and clearing if needed https://www.geeksforgeeks.org/cpp/stringstream-c-applications/
     stringstream ss(course_to_add->getCourseSubjectCode());
     char current;
     ss.get(current);
@@ -173,7 +161,6 @@ void trie::insertNode(Course* course_to_add)
                 index = current - 'A';
             }
         }
-
         //CHECK THE INDEXED THE LOCATION IS A POINTER OR NULLPTR - IF IT'S NULL, we create a new node.
         if (cursor->descendants.at(index) == nullptr) 
         {
@@ -191,22 +178,8 @@ void trie::insertNode(Course* course_to_add)
     cursor->setCoursePtr(course_to_add);
     this->setNumWords(this->getNumWords() + 1);
 }
-
-//REFLECTION
-/*helper function - DELETE
-Course* trie::createCourse(string new_title, string new_description, string new_notes, string new_subj_code, string new_skills, string new_plans, string new_hours)
-{
-    //DONE
-    Course* course_ptr=nullptr;
-    course_ptr = new Course();
-    course_ptr->setCourseInfo(new_title, new_description, new_notes, new_subj_code, new_skills, new_plans, new_hours);
-    return course_ptr;
-}*/
-
-
 void trie::removeNode(string doom_course_subject_code)
 {
-    //DONE
     if (searchTrie(doom_course_subject_code) == false)
     {
         return;
@@ -242,19 +215,6 @@ void trie::removeNode(string doom_course_subject_code)
                 index = current - 'A';
             }
         }
-        /*GOT THIS OF THIS - PUT IT AFTER WE ARRIVE AT THE RIGHT LOCATION.
-        //CHECK THE INDEXED THE LOCATION IS A POINTER OR NULLPTR - IF IT'S NULL, we should skip
-        if (cursor->descendants.at(index) != nullptr) 
-        {
-            predecessor=cursor;
-            cursor=cursor->descendants.at(index);
-
-            //remove reference from doom node
-            if (cursor->getLeafStatus() == true)
-            {
-                predecessor->descendants.at(index) = nullptr;
-            }
-        }*/
         //prep for next loop
         if (cursor->descendants.at(index) != nullptr)
         {
@@ -278,47 +238,6 @@ void trie::removeNode(string doom_course_subject_code)
         }
     }
 
-    //REFLECTION
-    //keep checking predecessor nodes and deleting them IF there are no other node* in the descendants.
-    //don't need to do this. may need to re-add, will be deleted all later anyway. 
-    /*bool done = false;
-    int counter=0;
-    while (!done)
-    {
-        //check the predecessor's descendants for other nodes, and to clear out this one
-        for (long unsigned int i=0;i<predecessor->descendants.size();i++)
-        {
-            if (cursor->descendants.at(i) != nullptr)
-            {
-                counter++;
-            }
-            if (cursor->descendants.at(i) == cursor)
-            {
-                cursor->descendants.at(i) = nullptr;
-            }
-        }
-        
-        //if we're at the root, we still need to update its descendants, which we did.
-        if (cursor == this->getRoot())
-        {
-            done=true;
-        }
-
-        else //not the root
-        {
-            delete cursor;
-            if (counter > 1)
-            {
-                done = true;
-            }
-            else
-            {
-                cursor = predecessor;
-                predecessor=cursor->getPredecessor();
-                counter=0;
-            }
-        }
-    }*/
 }
 /*
 bool trie::startsWithPrefix(string prefix)
@@ -327,8 +246,6 @@ bool trie::startsWithPrefix(string prefix)
     return answer;
 }*/
 
-//set up the string streams and prep the data to be read
-//https://www.geeksforgeeks.org/cpp/how-to-read-data-from-csv-file-to-a-2d-array-in-cpp/
 vector<Course*> trie::readData(string file_name)
 {
     vector<Course*> courses_to_insert_into_trie;
@@ -350,11 +267,7 @@ vector<Course*> trie::readData(string file_name)
     //read all data into one big line; we'll use string streams later to split it up by ',' and endline.
     while(readf.eof() != true)
     {
-        string csv_line="";
-        //connect the string stream so it's ready
-        //https://www.geeksforgeeks.org/cpp/getline-string-c/
-        //https://www.geeksforgeeks.org/cpp/file-handling-c-classes/
-
+        string csv_line=""; //connect the string stream so it's ready
         getline(readf, csv_line); //puts a full line from the file into line variable
         stringstream ss;  
         ss<<csv_line; //put the line from the file into the stream
@@ -367,14 +280,12 @@ vector<Course*> trie::readData(string file_name)
         string new_skills="";
         string new_plans="";
 
-        //now we can begin reading data
         for (long unsigned int i=0;i<7;i++) //iterate through the line to get each cell's value and store into 
         {
             csv_cell="";
             char garbage = ' ';
             //we only want to start by reading characters that are regular
             while (ss.peek() == '\"' || ss.peek() == ',' || ss.peek() == ' ')
-            //optional conditions|| static_cast<int>(ss.peek()) < 58 && static_cast<int>(ss.peek()) >= 48
             {
                 ss.get(garbage);
             }
@@ -384,13 +295,14 @@ vector<Course*> trie::readData(string file_name)
             //put the value in the right variable for the new Course
             if (i==0)
             {
-                //clear up the last 2 characters in each string
-                new_subj_code=csv_cell;/*
+                //TODO -- clear up the last x characters in each string?
+                /*
                 for (long unsigned int i=0;i<3;i++)
                 {
-                    new_subj_code.
+                    if 
                     if (new_subj_code.pop_back() == )
                 }*/
+                new_subj_code=csv_cell;
             }
             else if (i==1)
             {
@@ -426,9 +338,7 @@ vector<Course*> trie::readData(string file_name)
     }
     readf.close();
 
-    //we need to remove the headers
-    //https://www.geeksforgeeks.org/cpp/vector-erase-in-cpp-stl/
-    courses_to_insert_into_trie.erase(courses_to_insert_into_trie.begin());
+    courses_to_insert_into_trie.erase(courses_to_insert_into_trie.begin());     //remove headers
     return courses_to_insert_into_trie;
 }
 

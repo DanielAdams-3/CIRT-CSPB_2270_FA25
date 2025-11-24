@@ -31,10 +31,13 @@ class Course {
         string getCourseDescription(); //returns just the course description
         string getCourseTitle(); //return just the course title
         string getRegRestricts(); //returns just the skills learnt
-        map<string, string>* getPlansAndReqs(); //returns a pointer to a map you can iterate through
+        //returns the degree reqs as a string for given course_title. If key not found, return empty string
+        //for a given key, return the mapped value of PlansandReqs as a string
+        map<string, string>* getPlansAndReqs();
         string getCreditHours();
         //string getSkillsLearnt();
 
+        //Set by calling each individual setter function
         void setCourseInfo(string new_title, string new_description, string new_notes, string new_subjectCode, string new_skillsLearnt, string new_plans, string num_hours);
         void setCourseNotes(string new_notes); //called by setCourseInfo;
         void setCourseDescription(string new_description); //called by setCourseInfo;

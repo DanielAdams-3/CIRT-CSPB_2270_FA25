@@ -11,7 +11,6 @@ class trieNode {
         Course* coursePtr; //for leaf node's only, to point at a dynamically allocated course object
         bool to_delete;
         
-
     public:
         vector<trieNode*> descendants; //27 characters long, index 0 = '-' and rest are all capitals
 
@@ -21,8 +20,8 @@ class trieNode {
         void markDeletion(bool new_status);
         bool getDeleteStatus();
 
-        trieNode* getPredecessor();
-        void setPredecessor(trieNode* new_predecessor); //use right after initializing a new node
+        trieNode* getPredecessor(); //returns a pointer to the node's predecessor;
+        void setPredecessor(trieNode* new_predecessor); //use right after initializing a new node. sets the node's predecessor pointer to what is passed as a parameter;
         
         bool getLeafStatus();
         void setLeafStatus(bool leaf_val);

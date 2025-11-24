@@ -16,15 +16,10 @@ class trie{
         void treeDeleter(trieNode* subtreeRoot, vector<trieNode*>& to_delete);
         
         void setRoot(trieNode* new_root);
-        trieNode* getRoot();
+        trieNode* getRoot(); //returns a pointer to the node parameter;
 
-        void setNumWords(int new_val);
+        void setNumWords(int new_val); //returns the number of courses in the Trie
         int getNumWords();
-
-        //helper function
-        //to create a new course, setCourseInfo(title, description, notes, code, leartn, plans/reqs)
-        //and we add it to the vector we just created
-        //Course* createCourse(string new_title, string new_description, string new_notes, string new_subj_code, string new_skills, string new_plans, string new_hours);
 
         //set up the string streams and prep the data to be read
         vector<Course*> readData(string file_name);
@@ -37,9 +32,7 @@ class trie{
         void insertNode(Course* course_to_add); //be sure to call searchTrie
         void removeNode(string doom_course_subject_code); 
 
-
-        //this  is the function
-        //where we build the Trie as we read data from csv fstream
+        //we build the Trie as we read data from csv fstream
         //once this is done, we will be able to interact with the user
         void buildTrie(); 
 
