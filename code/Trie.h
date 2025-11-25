@@ -4,6 +4,7 @@
 #include "TrieNode.h"
 #include "Course.h"
 #include <fstream>
+#include <iomanip>
 
 class trie{
     private:
@@ -37,8 +38,11 @@ class trie{
         void buildTrie(); 
 
         //user interaction functions
-        //void outputResults
-        //void getUserInput
+        void outputCourseData(string course_subject_code);
+        void getUserInput();
+
+        //helper function for outputCourseData
+        Course* swapCodeforPtr(string course_subject_code);
 
         /*auto-complete options let's the user pass in a prefix
         bool startsWithPrefix(string prefix);*/

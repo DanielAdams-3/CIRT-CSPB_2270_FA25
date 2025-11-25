@@ -32,7 +32,7 @@ that are unique to the to-be-removed key. Each node will also contain metadata a
 number of courses in the node’s subtree and a list of those courses to aid in search and
 insertion functions.
 
-## CIRT Structure
+## CIRT Implementation
 Each Course object will contain strings for each course information item as well as a
 map of key-value pairs of strings, representing the degree plans that the course applies to,
 and the list of degree requirements that the course can satisfy for that degree plan.
@@ -100,7 +100,8 @@ and any related functions.
   //https://cplusplus.com/reference/string/string/end/
   //https://www.geeksforgeeks.org/cpp/stdstringinsert-in-c/
   //https://en.cppreference.com/w/cpp/string/basic_string/insert
-  //a few more sites related to .front(), .back(), .insert() for strings
+  //https://www.geeksforgeeks.org/cpp/traversing-a-map-or-unordered_map-in-cpp-stl/
+  //https://en.cppreference.com/w/cpp/container/map/begin.html
   
 
 ## Errors I encountered and how I resolved them

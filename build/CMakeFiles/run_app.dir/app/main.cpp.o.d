@@ -165,4 +165,11 @@ CMakeFiles/run_app.dir/app/main.cpp.o: \
  /home/jovyan/2270/CIRT-CSPB_2270_FA25/app/../code/TrieNode.h \
  /home/jovyan/2270/CIRT-CSPB_2270_FA25/app/../code/Course.h \
  /home/jovyan/2270/CIRT-CSPB_2270_FA25/app/../code/Trie.h \
- /home/jovyan/2270/CIRT-CSPB_2270_FA25/app/../code/TrieNode.h
+ /home/jovyan/2270/CIRT-CSPB_2270_FA25/app/../code/TrieNode.h \
+ /usr/include/c++/11/iomanip /usr/include/c++/11/locale \
+ /usr/include/c++/11/bits/locale_facets_nonio.h /usr/include/c++/11/ctime \
+ /usr/include/x86_64-linux-gnu/c++/11/bits/time_members.h \
+ /usr/include/x86_64-linux-gnu/c++/11/bits/messages_members.h \
+ /usr/include/libintl.h /usr/include/c++/11/bits/locale_facets_nonio.tcc \
+ /usr/include/c++/11/bits/locale_conv.h \
+ /usr/include/c++/11/bits/unique_ptr.h

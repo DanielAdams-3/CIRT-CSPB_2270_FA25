@@ -17,7 +17,7 @@ class Course {
         string courseTitle; //catalog, etc.
         string regRestricts; 
         string courseHours;
-        //string skillsLearnt; //from 3. Skills Learnt
+        string skillsLearnt; //from 3. Skills Learnt
 
     public:
 
@@ -25,7 +25,7 @@ class Course {
         ~Course(); //destructor
         map<string, string> plansNreqs; //from the csv
         
-        void getCourseInfo(string& title, string& description, string& notes, string& subjectCode, string& restricts, map<string,string>& plansandreqs, string& numHours);
+        void getCourseInfo(string& title, string& description, string& notes, string& subjectCode, string& restricts, map<string,string>& plansandreqs, string& numHours, string& SkillsLearnt);
         string getCourseSubjectCode(); //returns the entire subject code of the course
         string getCourseNotes(); //returns just the class notes
         string getCourseDescription(); //returns just the course description
@@ -33,12 +33,12 @@ class Course {
         string getRegRestricts(); //returns just the skills learnt
         //returns the degree reqs as a string for given course_title. If key not found, return empty string
         //for a given key, return the mapped value of PlansandReqs as a string
-        map<string, string>* getPlansAndReqs();
+        map<string, string> getPlansAndReqs();
         string getCreditHours();
-        //string getSkillsLearnt();
+        string getSkillsLearnt();
 
         //Set by calling each individual setter function
-        void setCourseInfo(string new_title, string new_description, string new_notes, string new_subjectCode, string new_skillsLearnt, string new_plans, string num_hours);
+        void setCourseInfo(string new_title, string new_description, string new_notes, string new_subjectCode, string new_restricts, string new_plans, string num_hours, string newSkillsLearnt);
         void setCourseNotes(string new_notes); //called by setCourseInfo;
         void setCourseDescription(string new_description); //called by setCourseInfo;
         void setCourseSubjectCode(string new_subj_code);//called by setCourseInfo;
@@ -46,7 +46,7 @@ class Course {
         void setRegRestricts(string new_reg_restricts);//called by setCourseInfo;
         void setPlansandReqs(string degreePlansAndReqs); //we take in that string value and populate the map, separted by ';'
         void setCreditHours(string num_hours);
-        //void setSkillsLearnt(string new_skills);
+        void setSkillsLearnt(string new_skills);
 };
 
 #endif //COURSE_H__

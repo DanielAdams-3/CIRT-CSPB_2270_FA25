@@ -277,17 +277,18 @@ vector<Course*> trie::readData(string file_name)
         string new_description="";
         string new_hours="";
         string new_notes="";
-        string new_skills="";
+        string new_restricts="";
         string new_plans="";
+        string new_skills="";
 
-        for (long unsigned int i=0;i<7;i++)
+        for (long unsigned int i=0;i<8;i++)
         {
             csv_cell="";
             getline(ss,csv_cell,'*');
 
             //CLEAN-UP BEGINNING AND END OF STRINGS
             char garbage = csv_cell.front();
-            while (garbage == '\"' || garbage == ',' || garbage == ' ')
+            while (garbage == '\"' || garbage == ',' || garbage == ' ' || garbage == ':')
             {
                 csv_cell.erase(0,1); //erase 1 character at position 0
                 garbage=csv_cell.front();
@@ -323,21 +324,21 @@ vector<Course*> trie::readData(string file_name)
             }
             else if (i==5)
             {
-                new_skills=csv_cell;
+                new_restricts=csv_cell;
             }
             else if (i==6)
             {
                 new_plans=csv_cell;
             }
-            //else if (i==7)
-            //{
-                //new_skills = csv_cell;
-            //}
+            else if (i==7)
+            {
+                new_skills = csv_cell;
+            }
         }
         if (new_subj_code != "")
         {
             Course* new_course = new Course();
-            new_course->setCourseInfo(new_title, new_description, new_notes, new_subj_code, new_skills, new_plans, new_hours);
+            new_course->setCourseInfo(new_title, new_description, new_notes, new_subj_code, new_restricts, new_plans, new_hours, new_skills);
             courses_to_insert_into_trie.push_back(new_course);
         }
     }
@@ -356,4 +357,110 @@ void trie::buildTrie()
         Course* cursor=new_courses.at(i);
         this->insertNode(cursor);
     }
+}
+
+Course* trie::swapCodeforPtr(string course_subject_code)
+{
+    Course* answer = nullptr;
+    if (this->searchTrie(course_subject_code) != true)
+    {
+        return answer;
+    }
+
+    if (this->getRoot() == nullptr)
+    {
+        cout << "error, root not set" << endl;
+        return answer;
+    }
+
+    //set up a string stream to read the course 
+    stringstream ss(course_subject_code);
+    char current;
+    ss.get(current);
+    while (current == ' ')
+    {
+        ss.get(current);
+    }
+    trieNode* cursor = this->getRoot();
+    int index = 0;
+    while (ss.eof() != true && current != ' ')
+    {
+        //CALCULATE THE INDEX OF THE CHARACTER
+        if (current=='-') //special character
+        {
+            index = 26;
+        }
+        else //accounts for 0-10 in 2nd half of subject code
+        {
+            if ( static_cast<int>(current) < 58 && static_cast<int>(current) >= 48 )
+            {
+                int subject_num=static_cast<int>(current) - 48; //48 is the difference between 0-9 and the ASCII value
+                index = subject_num + 27; //avoid first 27 slots in descendants indexing 26 letters, '-'
+            }
+            else
+            {
+                index = current - 'A';
+            }
+        }
+        //CHECK THE INDEXED THE LOCATION IS A POINTER OR NULLPTR - IF IT'S NULL, WE RETURN FALSE
+        if (cursor->descendants.at(index) == nullptr) 
+        {
+            return answer;
+        }
+        //prep for next loop
+        cursor=cursor->descendants.at(index);
+        ss.get(current);
+        index = 0;
+    }
+    //verify we found the right course and assign the answer to the Course Ptr so we can return it
+    if (cursor->getLeafStatus() == true && cursor->getCoursePtr()->getCourseSubjectCode() == course_subject_code)
+    {
+        answer=cursor->getCoursePtr();
+    }
+    return answer;
+
+}
+
+void trie::outputCourseData(string course_subject_code)
+{
+    //creating a Helper function to call a Course* based on user input more easily
+    if (this->searchTrie(course_subject_code) != true)
+    {
+        cout << "Unfortunately, the course is not in the program." << endl;
+    }
+    Course* cursor = this->swapCodeforPtr(course_subject_code);
+
+    const int OUTPUT_WIDTH = 25;
+
+    string course_subject="";
+    string course_title="";
+    string course_description="";
+    string course_notes="";
+    string reg_restricts="";
+    map<string,string> plansreqs;
+    string credit_hours="";
+    string course_skills="";
+
+    cursor->getCourseInfo(course_title,course_description,course_notes,course_subject,reg_restricts, plansreqs,credit_hours,course_skills);
+
+    //do assignments all once!
+
+    cout << course_subject_code << " INFORMATION " << endl;
+    cout << "Course Title: " <<  course_title << endl;
+    cout << "Course Description: " << course_description << endl;
+    cout << "Skills Learned: " << course_skills << endl;    
+    cout << "Course Notes: " << course_notes << endl;
+    cout << "Credit Hours: " << credit_hours << endl;
+    cout << "Registration Restrictions: " << reg_restricts << endl;
+    cout << "Degree Plan Requirements: " << endl;
+    for (auto i  = plansreqs.begin(); i!= plansreqs.end(); i++)
+    {
+      cout << i->first << ": " << i->second << endl;
+    }
+    cout << "END" << endl;
+}
+void trie::getUserInput()
+{
+    //TODO
+    //make sure to 
 }

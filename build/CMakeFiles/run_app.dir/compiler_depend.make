@@ -206,7 +206,17 @@ CMakeFiles/run_app.dir/app/main.cpp.o: ../app/main.cpp \
   ../code/TrieNode.h \
   ../code/Course.h \
   ../code/Trie.h \
-  ../code/TrieNode.h
+  ../code/TrieNode.h \
+  /usr/include/c++/11/iomanip \
+  /usr/include/c++/11/locale \
+  /usr/include/c++/11/bits/locale_facets_nonio.h \
+  /usr/include/c++/11/ctime \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/time_members.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/messages_members.h \
+  /usr/include/libintl.h \
+  /usr/include/c++/11/bits/locale_facets_nonio.tcc \
+  /usr/include/c++/11/bits/locale_conv.h \
+  /usr/include/c++/11/bits/unique_ptr.h
 
 CMakeFiles/run_app.dir/code/Course.cpp.o: ../code/Course.cpp \
   /usr/include/stdc-predef.h \
@@ -614,7 +624,17 @@ CMakeFiles/run_app.dir/code/Trie.cpp.o: ../code/Trie.cpp \
   /usr/include/c++/11/bits/stl_uninitialized.h \
   /usr/include/c++/11/bits/stl_vector.h \
   /usr/include/c++/11/bits/stl_bvector.h \
-  /usr/include/c++/11/bits/vector.tcc
+  /usr/include/c++/11/bits/vector.tcc \
+  /usr/include/c++/11/iomanip \
+  /usr/include/c++/11/locale \
+  /usr/include/c++/11/bits/locale_facets_nonio.h \
+  /usr/include/c++/11/ctime \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/time_members.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/messages_members.h \
+  /usr/include/libintl.h \
+  /usr/include/c++/11/bits/locale_facets_nonio.tcc \
+  /usr/include/c++/11/bits/locale_conv.h \
+  /usr/include/c++/11/bits/unique_ptr.h
 
 CMakeFiles/run_app.dir/code/TrieNode.cpp.o: ../code/TrieNode.cpp \
   /usr/include/stdc-predef.h \
@@ -825,6 +845,14 @@ CMakeFiles/run_app.dir/code/TrieNode.cpp.o: ../code/TrieNode.cpp \
 
 ../code/Course.cpp:
 
+/usr/include/c++/11/bits/locale_conv.h:
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/messages_members.h:
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/time_members.h:
+
+/usr/include/c++/11/bits/locale_facets_nonio.h:
+
 /usr/include/c++/11/bits/vector.tcc:
 
 /usr/include/c++/11/bits/stl_bvector.h:
@@ -1005,6 +1033,8 @@ CMakeFiles/run_app.dir/code/TrieNode.cpp.o: ../code/TrieNode.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h:
 
+/usr/include/c++/11/bits/unique_ptr.h:
+
 /usr/include/c++/11/ostream:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h:
@@ -1043,6 +1073,8 @@ CMakeFiles/run_app.dir/code/TrieNode.cpp.o: ../code/TrieNode.cpp \
 
 /usr/include/c++/11/iosfwd:
 
+/usr/include/c++/11/ctime:
+
 /usr/include/c++/11/bits/codecvt.h:
 
 /usr/include/x86_64-linux-gnu/bits/time64.h:
@@ -1073,6 +1105,8 @@ CMakeFiles/run_app.dir/code/TrieNode.cpp.o: ../code/TrieNode.cpp \
 
 /usr/include/features-time64.h:
 
+/usr/include/c++/11/locale:
+
 /usr/include/linux/errno.h:
 
 /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h:
@@ -1102,6 +1136,8 @@ CMakeFiles/run_app.dir/code/TrieNode.cpp.o: ../code/TrieNode.cpp \
 /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h:
 
 ../app/main.cpp:
+
+/usr/include/c++/11/bits/locale_facets_nonio.tcc:
 
 /usr/include/c++/11/bits/stl_pair.h:
 
@@ -1165,6 +1201,8 @@ CMakeFiles/run_app.dir/code/TrieNode.cpp.o: ../code/TrieNode.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/locale.h:
 
+/usr/include/libintl.h:
+
 /usr/include/x86_64-linux-gnu/bits/endianness.h:
 
 ../code/TrieNode.cpp:
@@ -1188,6 +1226,8 @@ CMakeFiles/run_app.dir/code/TrieNode.cpp.o: ../code/TrieNode.cpp \
 /usr/include/x86_64-linux-gnu/bits/types/timer_t.h:
 
 /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h:
+
+/usr/include/c++/11/iomanip:
 
 /usr/include/c++/11/ext/new_allocator.h:
 
