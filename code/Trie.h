@@ -10,6 +10,7 @@ class trie{
     private:
         int numWords; //number of courses in the subtree
         trieNode* root; //root of the tree;
+        bool userStatus;
 
     public:
         trie(); //constructor
@@ -37,15 +38,23 @@ class trie{
         //once this is done, we will be able to interact with the user
         void buildTrie(); 
 
+        /*auto-complete options let's the user pass in a prefix that is less than or equal to the length of every course subject code.
+        bool startsWithPrefix(string prefix);*/
+
         //user interaction functions
         void outputCourseData(string course_subject_code);
         void getUserInput();
+        void setUserStatus(bool new_status);
+        bool getUserStatus();
 
-        //helper function for outputCourseData
+        //helper functions for outputCourseData
+        ////this one returns the Course* for a given course_subject_code
         Course* swapCodeforPtr(string course_subject_code);
+        ////this one returns a string that has been prepraed for Word wrapping
+        ////which is to say, it maintains a conssitent output every given characters
+        string consoleOutputWordWrapping(string course_subject_code, const int WIDTH_OF_LINE);
 
-        /*auto-complete options let's the user pass in a prefix
-        bool startsWithPrefix(string prefix);*/
+
 };
 
 #endif //TRIE_H__

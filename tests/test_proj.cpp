@@ -117,6 +117,7 @@ protected:
   void SetUp() override {}
 };
 
+
 TEST_F(test_Trie, SetGetRoot) {
   trie a = trie();
   trieNode* new_root = new trieNode();
@@ -225,12 +226,9 @@ TEST_F(test_Trie, output)
   trieNode* root_node = new trieNode();
   a.setRoot(root_node);
   a.buildTrie();
-
-  cout << "testing output" << endl;
   a.outputCourseData("CSCI-5253");
-
 };
-/*
+
 TEST_F(test_Trie, input)
 {
   trie a = trie();
@@ -238,8 +236,9 @@ TEST_F(test_Trie, input)
   a.setRoot(root_node);
   a.buildTrie();
 
-  cout << "testing user input here" << endl;
-  a.UserInputActive();
+  ASSERT_EQ(a.userStatus,false);
+  a.setUserStatus(true);
+  ASSERT_EQ(a.userStatus,true);
   a.getUserInput();
+
 };
-*/

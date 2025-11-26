@@ -8,6 +8,7 @@ trie::trie()
     this->numWords=0;
     trieNode* root= new trieNode();
     this->setRoot(root);
+    this->userStatus=false;
 } 
 
 //destructor
@@ -423,15 +424,25 @@ Course* trie::swapCodeforPtr(string course_subject_code)
 
 void trie::outputCourseData(string course_subject_code)
 {
-    //creating a Helper function to call a Course* based on user input more easily
+    //40
+    const int LINE_LENGTH = 40;
+    const string LINE_WIDTH_40 = "----------------------------------------";
+
+    //if not in there
     if (this->searchTrie(course_subject_code) != true)
     {
-        cout << "Unfortunately, the course is not in the program." << endl;
+        cout << "Unfortunately, the course is not available." << endl;
+        return;
     }
+
     Course* cursor = this->swapCodeforPtr(course_subject_code);
 
-    const int OUTPUT_WIDTH = 25;
+    //OUTPUT MESSAGE TO USER
+    cout << LINE_WIDTH_40 << endl;
+    cout << "Course found: " << course_subject_code << endl;
+    cout << "Loading..." << endl;
 
+    //PREPARE FOR OUTPUT
     string course_subject="";
     string course_title="";
     string course_description="";
@@ -440,27 +451,160 @@ void trie::outputCourseData(string course_subject_code)
     map<string,string> plansreqs;
     string credit_hours="";
     string course_skills="";
+    cursor->getCourseInfo(course_title, course_description, course_notes, course_subject, reg_restricts,
+    plansreqs, credit_hours, course_skills);
 
-    cursor->getCourseInfo(course_title,course_description,course_notes,course_subject,reg_restricts, plansreqs,credit_hours,course_skills);
+    //BEGIN OUTPUT
+    cout << LINE_WIDTH_40 << endl;
+    cout << LINE_WIDTH_40 << endl;
+    cout << course_subject_code << endl;
+    cout << LINE_WIDTH_40 << endl;
+    cout << "COURSE TITLE: " << endl;    
+    string title_output = consoleOutputWordWrapping(course_title, LINE_LENGTH);
+    cout << title_output << endl;
+    cout << LINE_WIDTH_40 << endl;
 
-    //do assignments all once!
+    cout << "COURSE DESCRIPTION: " << endl;
+    string description_output = consoleOutputWordWrapping(course_description, LINE_LENGTH);
+    cout << description_output << endl;
+    cout << LINE_WIDTH_40 << endl;
+    
+    cout << "SKILLS LEARNED: " << endl;
+    string skills_output = consoleOutputWordWrapping(course_skills,LINE_LENGTH);
+    cout << skills_output << endl;
+    cout << LINE_WIDTH_40 << endl;
+    
+    cout << "COURSE NOTES: " << endl;
+    string notes_output = consoleOutputWordWrapping(course_notes,LINE_LENGTH);
+    cout << notes_output << endl;
+    cout << LINE_WIDTH_40 << endl;
 
-    cout << course_subject_code << " INFORMATION " << endl;
-    cout << "Course Title: " <<  course_title << endl;
-    cout << "Course Description: " << course_description << endl;
-    cout << "Skills Learned: " << course_skills << endl;    
-    cout << "Course Notes: " << course_notes << endl;
-    cout << "Credit Hours: " << credit_hours << endl;
-    cout << "Registration Restrictions: " << reg_restricts << endl;
-    cout << "Degree Plan Requirements: " << endl;
+    cout << "CREDIT HOURS: " << endl;
+    string hours_output = consoleOutputWordWrapping(credit_hours,LINE_LENGTH);
+    cout << hours_output << endl;
+    cout << LINE_WIDTH_40 << endl;
+
+    cout << "REGISTRATION RESTRICTIONS: " << endl;
+    string restricts_output = consoleOutputWordWrapping(reg_restricts,LINE_LENGTH);
+    cout << restricts_output << endl;
+    cout << LINE_WIDTH_40 << endl;
+
+    cout << "DEGREE PLAN REQUIREMENTS: " << endl;
     for (auto i  = plansreqs.begin(); i!= plansreqs.end(); i++)
     {
-      cout << i->first << ": " << i->second << endl;
+        stringstream ss;
+        string this_line = "";
+        int gap = 12-i->first.length();
+        ss << i->first << left << setw(gap) << ": " << i->second;
+        getline(ss,this_line);
+        this_line=consoleOutputWordWrapping(this_line,LINE_LENGTH);
+        cout << this_line << endl;
     }
-    cout << "END" << endl;
+    cout << LINE_WIDTH_40 << endl;
 }
+
+string trie::consoleOutputWordWrapping(string to_word_wrap, const int WIDTH_OF_LINE)
+{
+    string answer = "";
+
+    stringstream originalSS;
+    stringstream destinationSS;
+    originalSS << to_word_wrap;
+    int counter=0;
+    int gap_to_end = 0;
+    string word="";
+    do
+    {
+        getline(originalSS,word,' ');
+        word=word.append(" "); //re-add the ' ' that getline consumed
+        gap_to_end = WIDTH_OF_LINE - counter;
+        if (gap_to_end <= word.length())
+        {
+            destinationSS<<'\n';
+            counter=0;
+        }
+        destinationSS<<word;
+        counter = counter+word.length();
+    } while (originalSS.eof() != true);
+
+    char temp_val = ' ';
+    while (destinationSS.eof() != true)
+    {
+        destinationSS.get(temp_val);
+        //destinationSS >> temp_answer; //THIS IS WHERE WE'RE LOSING THE SPACE
+        answer.push_back(temp_val);
+    }
+
+    if (answer.back() == ' ')
+    {
+        answer.pop_back();
+    }
+    return answer;
+}
+
+void trie::setUserStatus(bool new_status)
+{
+    this->userStatus=new_status;
+}
+bool trie::getUserStatus()
+{
+    return this->userStatus;
+}
+
+//this may just be the main.cpp function below, not sure we need this function as part of the Trie();
 void trie::getUserInput()
 {
-    //TODO
-    //make sure to 
+    cout << "CIRT - Course Information Retrieval Tool" << endl;
+    cout << "Status: On" << endl;
+    cout << "-----------------------------------------" << endl;
+    
+    this->setUserStatus(true);
+    
+    string input="";
+    cout << "MENU" << endl;
+    cout << "-----------------------------------------" << endl;
+    cout << "SEARCH:" << endl;
+    cout << "--1-- Enter the 4-digit subject code (eg 'CSCI')" << endl;
+    cout << "--2-- Enter a dash or hyphen (eg '-')" << endl;
+    cout << "--3-- Enter the 4-digit course number (eg '5832')" << endl;
+    cout << "--4-- Press the Enter key" << endl;
+    cout << "----- Example: CSCI 5832'" << endl;
+    cout << "QUIT:" << endl;
+    cout << "--1-- Press Q" << endl;
+    cout << "--2-- Press Enter" << endl;
+    cout << "-----------------------------------------" << endl;
+    cout << "Waiting for user input...---->";
+
+    do
+    {
+        cin >> input;
+        if (input == "Q")
+        {
+            this->setUserStatus(false);
+        }
+        else
+        {
+            //ERROR HANDLING
+            if (input.length() < 7 || input.length() >9)
+            {
+                cout << "Incorrect length provided. Please use 4 digits for the subject area, 1 digit for the dash/hyphen, and 4 digits for the course number." << endl;
+            }
+
+            //if they just put a space instead
+            if (input.at(5) == ' ')
+            {
+                input.at(5) = '-';
+            }
+
+            cout << "Searching for: " << input << endl;
+
+            outputCourseData(input);
+            cout << "-----------------------------------------" << endl;
+            cout << "Waiting for user input...---->";
+        }
+    } while(this->getUserStatus() == true);
+    
+    cout << "QUIT" << endl;
+    cout << "-----------------------------------------" << endl;
+    cout << "CIRT Program status: Off" << endl;
 }

@@ -6,7 +6,10 @@
         "iostream": "cpp",
         "vector": "cpp",
         "random": "cpp",
-        "*.tcc": "cpp"
+        "*.tcc": "cpp",
+        "ostream": "cpp",
+        "string": "cpp",
+        "iomanip": "cpp"
     }
     
 }
