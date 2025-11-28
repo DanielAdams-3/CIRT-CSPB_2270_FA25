@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Trie Demo (Plain Text API)</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 1rem;
+      line-height: 1.5;
+    }
+    h1 {
+      font-size: 1.6rem;
+      margin-bottom: 0.5rem;
+    }
+    .row {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    input[type="text"] {
+      flex: 1;
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    #result, #suggestions {
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      border-radius: 4px;
+      background: #CFB87C;
+      min-height: 1.5rem;
+      white-space: pre-wrap;
+    }
+    ul {
+      padding-left: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>CIRT Demo - Course Information Retrieval Tool</h1>
+  <p>Type a Course Subject and click <strong>Lookup</strong> to see if it’s in the trie.</p>
+
+  <div class="row">
+    <input id="wordInput" type="text" placeholder="enter a word..." />
+    <button onclick="lookupWord()">Lookup</button>
+  </div>
+  <div id="result"></div>
+
+  <hr />
+
+  <p>Type a prefix and click <strong>Autocomplete</strong> to get suggestions.</p>
+  <div class="row">
+    <input id="prefixInput" type="text" placeholder="enter a prefix..." />
+    <button onclick="autocomplete()">Autocomplete</button>
+  </div>
+  <div id="suggestions"></div>
+
+  <script>
+    async function lookupWord() {
+      const word = document.getElementById('wordInput').value.trim();
+      const resultDiv = document.getElementById('result');
+      if (!word) {
+        resultDiv.textContent = 'Please enter a word.';
+        return;
+      }
+      resultDiv.textContent = 'Checking...';
+      try {
+        const resp = await fetch('/lookup?q=' + encodeURIComponent(word));
+        if (!resp.ok) {
+          const text = await resp.text();
+          resultDiv.textContent = 'Error: ' + resp.status + ' ' + resp.statusText + '\\n' + text;
+          return;
+        }
+        const text = await resp.text();
+        if (text.startsWith('FOUND ')) {
+          const w = text.substring('FOUND '.length);
+          resultDiv.textContent = '“' + w + '” is in the trie.';
+        } else if (text.startsWith('NOT_FOUND ')) {
+          const w = text.substring('NOT_FOUND '.length);
+          resultDiv.textContent = '“' + w + '” is NOT in the trie.';
+        } else {
+          resultDiv.textContent = 'Unexpected response: ' + text;
+        }
+      } catch (err) {
+        resultDiv.textContent = 'Request failed: ' + err;
+      }
+    }
+
+    async function autocomplete() {
+      const prefix = document.getElementById('prefixInput').value.trim();
+      const suggestionsDiv = document.getElementById('suggestions');
+      if (!prefix) {
+        suggestionsDiv.textContent = 'Please enter a prefix.';
+        return;
+      }
+      suggestionsDiv.textContent = 'Searching...';
+      try {
+        const resp = await fetch('/autocomplete?q=' + encodeURIComponent(prefix));
+        if (!resp.ok) {
+          const text = await resp.text();
+          suggestionsDiv.textContent = 'Error: ' + resp.status + ' ' + resp.statusText + '\\n' + text;
+          return;
+        }
+        const text = await resp.text();
+        const lines = text.split(/\\r?\\n/).map(l => l.trim()).filter(l => l.length > 0);
+        if (lines.length === 0) {
+          suggestionsDiv.textContent = 'No suggestions for “' + prefix + '”.';
+          return;
+        }
+        suggestionsDiv.innerHTML = '';
+        const ul = document.createElement('ul');
+        lines.forEach(w => {
+          const li = document.createElement('li');
+          li.textContent = w;
+          ul.appendChild(li);
+        });
+        suggestionsDiv.appendChild(ul);
+      } catch (err) {
+        suggestionsDiv.textContent = 'Request failed: ' + err;
+      }
+    }
+  </script>
+</body>
+</html>
