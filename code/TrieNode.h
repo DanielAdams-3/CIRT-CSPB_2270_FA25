@@ -4,25 +4,25 @@
 #include "Course.h"
 using namespace std;
 
-class trieNode {
+class TrieNode {
     private:
-        trieNode* predecessor;
+        TrieNode* predecessor;
         bool isLeaf; //true only when we reach the end of the course subject code
         Course* coursePtr; //for leaf node's only, to point at a dynamically allocated course object
         bool to_delete;
         bool prefix_finder;
         
     public:
-        vector<trieNode*> descendants; //27 characters long, index 0 = '-' and rest are all capitals
+        vector<TrieNode*> descendants; //27 characters long, index 0 = '-' and rest are all capitals
 
-        trieNode(); //constructor
-        ~trieNode(); //destructor
+        TrieNode(); //constructor
+        ~TrieNode(); //destructor
 
         void markDeletion(bool new_status);
         bool getDeleteStatus();
 
-        trieNode* getPredecessor(); //returns a pointer to the node's predecessor;
-        void setPredecessor(trieNode* new_predecessor); //use right after initializing a new node. sets the node's predecessor pointer to what is passed as a parameter;
+        TrieNode* getPredecessor(); //returns a pointer to the node's predecessor;
+        void setPredecessor(TrieNode* new_predecessor); //use right after initializing a new node. sets the node's predecessor pointer to what is passed as a parameter;
         
         bool getLeafStatus();
         void setLeafStatus(bool leaf_val);

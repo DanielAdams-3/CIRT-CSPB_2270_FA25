@@ -6,19 +6,19 @@
 #include <fstream>
 #include <iomanip>
 
-class trie{
+class Trie{
     private:
         int numWords; //number of courses in the subtree
-        trieNode* root; //root of the tree;
+        TrieNode* root; //root of the tree;
         bool userStatus;
 
     public:
-        trie(); //constructor
-        ~trie(); //destructor
-        void treeDeleter(trieNode* subtreeRoot, vector<trieNode*>& to_delete);
+        Trie(); //constructor
+        ~Trie(); //destructor
+        void treeDeleter(TrieNode* subtreeRoot, vector<TrieNode*>& to_delete);
         
-        void setRoot(trieNode* new_root);
-        trieNode* getRoot(); //returns a pointer to the node parameter;
+        void setRoot(TrieNode* new_root);
+        TrieNode* getRoot(); //returns a pointer to the node parameter;
 
         void setNumWords(int new_val); //returns the number of courses in the Trie
         int getNumWords();
@@ -48,7 +48,7 @@ class trie{
         //auto-complete options let's the user pass in a prefix that is less than or equal to the length of every course subject code.
         vector<Course*> startsWithPrefix(string prefix);
         //helper function for auto-complete
-        void prefixFinder(trieNode* currentNode, vector<trieNode*>& searchForMatches);
+        void prefixFinder(TrieNode* currentNode, vector<TrieNode*>& searchForMatches);
         
         //user interaction functions
         void outputCourseData(string course_subject_code);

@@ -3,7 +3,7 @@
 using namespace std;
 
 //constructor
-trieNode::trieNode()
+TrieNode::TrieNode()
 {
     predecessor=nullptr;
     isLeaf=false; 
@@ -17,48 +17,48 @@ trieNode::trieNode()
     coursePtr=nullptr;
 } 
 //destructor
-trieNode::~trieNode()
+TrieNode::~TrieNode()
 {
     //DONE    
 }
-void trieNode::markDeletion(bool new_status)
+void TrieNode::markDeletion(bool new_status)
 {
     this->to_delete=new_status;
 }
 
-bool trieNode::getDeleteStatus()
+bool TrieNode::getDeleteStatus()
 {
     return this->to_delete;
 }
-bool trieNode::getPrefixFlag()
+bool TrieNode::getPrefixFlag()
 {
     return this->prefix_finder;
 }
-void trieNode::setPrefixFlag(bool new_flag_val)
+void TrieNode::setPrefixFlag(bool new_flag_val)
 {
     this->prefix_finder=new_flag_val;
 }
-trieNode* trieNode::getPredecessor()
+TrieNode* TrieNode::getPredecessor()
 {
     return this->predecessor;
 }
-void trieNode::setPredecessor(trieNode* new_predecessor)
+void TrieNode::setPredecessor(TrieNode* new_predecessor)
 {
     this->predecessor=new_predecessor;
 }
-bool trieNode::getLeafStatus()
+bool TrieNode::getLeafStatus()
 {
     return this->isLeaf;
 }
-void trieNode::setLeafStatus(bool leaf_val)
+void TrieNode::setLeafStatus(bool leaf_val)
 {
     this->isLeaf = leaf_val;
 }
-Course* trieNode::getCoursePtr()
+Course* TrieNode::getCoursePtr()
 {
     return this->coursePtr;
 }
-void trieNode::setCoursePtr(Course* new_course_ptr)
+void TrieNode::setCoursePtr(Course* new_course_ptr)
 {
     this->coursePtr = new_course_ptr;
 }

@@ -3,32 +3,32 @@
 using namespace std;
 
 //constructor, set default values
-trie::trie()
+Trie::Trie()
 {
     this->numWords=0;
-    trieNode* root= new trieNode();
+    TrieNode* root= new TrieNode();
     this->setRoot(root);
     this->userStatus=false;
 } 
 
 //destructor
-trie::~trie()
+Trie::~Trie()
 {
     //DYNAMIC MEMORY ALLOCATION
-    vector<trieNode*> to_delete;
-    trieNode* cursor=this->getRoot();
+    vector<TrieNode*> to_delete;
+    TrieNode* cursor=this->getRoot();
     treeDeleter(cursor, to_delete);
     for (long unsigned int i=0;i<to_delete.size();i++)
     {
-        trieNode* doom_node = to_delete.at(i);
+        TrieNode* doom_node = to_delete.at(i);
         delete doom_node;
     }
 } 
 
 //recursively finds nodes to delete
-void trie::treeDeleter(trieNode* subtreeRoot, vector<trieNode*>& to_delete)
+void Trie::treeDeleter(TrieNode* subtreeRoot, vector<TrieNode*>& to_delete)
 {
-    trieNode* cursor = subtreeRoot;
+    TrieNode* cursor = subtreeRoot;
     for (long unsigned int i=0;i<cursor->descendants.size();i++)
     {
         if (cursor->descendants.at(i) != nullptr)
@@ -48,24 +48,24 @@ void trie::treeDeleter(trieNode* subtreeRoot, vector<trieNode*>& to_delete)
     }
 }
 
-void trie::setRoot(trieNode* new_root)
+void Trie::setRoot(TrieNode* new_root)
 {
     this->root = new_root;
 }
-trieNode* trie::getRoot()
+TrieNode* Trie::getRoot()
 {
     return this->root;
 }
-int trie::getNumWords()
+int Trie::getNumWords()
 {
     return this->numWords;
 } 
-void trie::setNumWords (int new_val)
+void Trie::setNumWords (int new_val)
 {
     this->numWords=new_val;
 }
 
-bool trie::contains(string word)
+bool Trie::contains(string word)
 {
     if (searchTrie(word) == true)
     {
@@ -76,7 +76,7 @@ bool trie::contains(string word)
         return false;
     }
 }
-bool trie::searchTrie(string course_to_find)
+bool Trie::searchTrie(string course_to_find)
 {
     bool answer = false;
     if (this->getRoot() == nullptr)
@@ -93,7 +93,7 @@ bool trie::searchTrie(string course_to_find)
     {
         ss.get(current);
     }
-    trieNode* cursor = this->getRoot();
+    TrieNode* cursor = this->getRoot();
     int index = 0;
     while (ss.eof() != true && current != ' ')
     {
@@ -132,7 +132,7 @@ bool trie::searchTrie(string course_to_find)
     return answer;
 }
 
-void trie::insertNode(Course* course_to_add)
+void Trie::insertNode(Course* course_to_add)
 {
     bool node_exists=this->searchTrie(course_to_add->getCourseSubjectCode());
 
@@ -143,10 +143,10 @@ void trie::insertNode(Course* course_to_add)
     //if the tree has no root;
     if (this->getRoot() == nullptr)
     {
-        trieNode* new_root = new trieNode();
+        TrieNode* new_root = new TrieNode();
         this->setRoot(new_root);
     }
-    trieNode* cursor=this->getRoot();
+    TrieNode* cursor=this->getRoot();
     stringstream ss(course_to_add->getCourseSubjectCode());
     char current;
     ss.get(current);
@@ -178,7 +178,7 @@ void trie::insertNode(Course* course_to_add)
         if (cursor->descendants.at(index) == nullptr) 
         {
             //create a new node, UPDATE POINTER FROM CURRENT NODE, set predecessor and stuff
-            trieNode* next_node = new trieNode();
+            TrieNode* next_node = new TrieNode();
             next_node->setPredecessor(cursor);
             cursor->descendants.at(index) = next_node;
         }
@@ -191,14 +191,14 @@ void trie::insertNode(Course* course_to_add)
     cursor->setCoursePtr(course_to_add);
     this->setNumWords(this->getNumWords() + 1);
 }
-void trie::removeNode(string doom_course_subject_code)
+void Trie::removeNode(string doom_course_subject_code)
 {
     if (searchTrie(doom_course_subject_code) == false)
     {
         return;
     }
-    trieNode* cursor=this->getRoot();
-    trieNode* predecessor=nullptr;
+    TrieNode* cursor=this->getRoot();
+    TrieNode* predecessor=nullptr;
 
     stringstream ss(doom_course_subject_code);
     char current;
@@ -252,7 +252,7 @@ void trie::removeNode(string doom_course_subject_code)
     }
 }
 
-vector<Course*> trie::readData(string file_name)
+vector<Course*> Trie::readData(string file_name)
 {
     vector<Course*> courses_to_insert_into_trie;
 
@@ -357,7 +357,7 @@ vector<Course*> trie::readData(string file_name)
     return courses_to_insert_into_trie;
 }
 
-bool trie::load(const string& filename)
+bool Trie::load(const string& filename)
 {
     buildTrie(filename);
     if (this->getNumWords() >0)
@@ -370,7 +370,7 @@ bool trie::load(const string& filename)
     }
 }
 
-void trie::buildTrie(string filename)
+void Trie::buildTrie(string filename)
 {
     //string filename = "../static/test_cirt_data.csv"; not working
     //string filename = "code/static/test_cirt_data.csv"; //not orking
@@ -384,7 +384,7 @@ void trie::buildTrie(string filename)
     }
 }
 
-vector<string> trie::autocomplete(const string& prefix, size_t max_results)
+vector<string> Trie::autocomplete(const string& prefix, size_t max_results)
 {
     vector<string> suggestions;
     vector<Course*> coursePTRresults = startsWithPrefix(prefix);
@@ -396,21 +396,20 @@ vector<string> trie::autocomplete(const string& prefix, size_t max_results)
 }
 
 
-vector<Course*> trie::startsWithPrefix(string prefix)
+vector<Course*> Trie::startsWithPrefix(string prefix)
 {
-    //DONE
     vector<Course*> search_results;
 
     //return the spot at which the prefix provided stops, recursively add all descendants we haven't visited
     //to a vector, and if they match the prefix, add them to the vector search_results; we can do this recursively
-    trieNode* cursor=this->getRoot();
-    vector<trieNode*> searchForMatches;
+    TrieNode* cursor=this->getRoot();
+    vector<TrieNode*> searchForMatches;
     prefixFinder(cursor, searchForMatches);
 
     //now that we have the search node list
     for (long unsigned int i=0;i<searchForMatches.size();i++)
     {
-        trieNode* subCursor=searchForMatches.at(i);
+        TrieNode* subCursor=searchForMatches.at(i);
         bool differences = false;
         if (subCursor->getCoursePtr() != nullptr)
         {
@@ -439,16 +438,16 @@ vector<Course*> trie::startsWithPrefix(string prefix)
 } 
 
 //helper to recursively search for CoursePtrs
-void trie::prefixFinder(trieNode* currentNode, vector<trieNode*>& searchForMatches)
+void Trie::prefixFinder(TrieNode* currentNode, vector<TrieNode*>& searchForMatches)
 {
-    trieNode* cursor = currentNode;
+    TrieNode* cursor = currentNode;
     for (long unsigned int i=0;i<cursor->descendants.size();i++)
     {
         if (cursor->descendants.at(i) != nullptr && cursor->descendants.at(i)->getPrefixFlag() != true)
         {
             if (cursor->descendants.at(i) != nullptr)
             {
-                trieNode* subCursor = cursor->descendants.at(i);
+                TrieNode* subCursor = cursor->descendants.at(i);
                 for (long unsigned int j=0;j<subCursor->descendants.size();j++)
                 {
                     if (subCursor->getPrefixFlag() != true)
@@ -469,7 +468,7 @@ void trie::prefixFinder(trieNode* currentNode, vector<trieNode*>& searchForMatch
     }
 }
 
-Course* trie::swapCodeforPtr(string course_subject_code)
+Course* Trie::swapCodeforPtr(string course_subject_code)
 {
     Course* answer = nullptr;
     if (this->searchTrie(course_subject_code) != true)
@@ -491,7 +490,7 @@ Course* trie::swapCodeforPtr(string course_subject_code)
     {
         ss.get(current);
     }
-    trieNode* cursor = this->getRoot();
+    TrieNode* cursor = this->getRoot();
     int index = 0;
     while (ss.eof() != true && current != ' ')
     {
@@ -531,7 +530,7 @@ Course* trie::swapCodeforPtr(string course_subject_code)
 
 }
 
-void trie::outputCourseData(string course_subject_code)
+void Trie::outputCourseData(string course_subject_code)
 {
     //40
     const int LINE_LENGTH = 40;
@@ -611,7 +610,7 @@ void trie::outputCourseData(string course_subject_code)
     cout << LINE_WIDTH_40 << endl;
 }
 
-string trie::consoleOutputWordWrapping(string to_word_wrap, const int WIDTH_OF_LINE)
+string Trie::consoleOutputWordWrapping(string to_word_wrap, const int WIDTH_OF_LINE)
 {
     string answer = "";
 
@@ -650,17 +649,17 @@ string trie::consoleOutputWordWrapping(string to_word_wrap, const int WIDTH_OF_L
     return answer;
 }
 
-void trie::setUserStatus(bool new_status)
+void Trie::setUserStatus(bool new_status)
 {
     this->userStatus=new_status;
 }
-bool trie::getUserStatus()
+bool Trie::getUserStatus()
 {
     return this->userStatus;
 }
 
 //this may just be the main.cpp function below, not sure we need this function as part of the Trie();
-void trie::getUserInput()
+void Trie::getUserInput()
 {
     cout << "CIRT - Course Information Retrieval Tool" << endl;
     cout << "Status: On" << endl;
