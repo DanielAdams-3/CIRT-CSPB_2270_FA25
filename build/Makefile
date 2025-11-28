@@ -257,6 +257,60 @@ code/TrieNode.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_app.dir/build.make CMakeFiles/run_app.dir/code/TrieNode.cpp.s
 .PHONY : code/TrieNode.cpp.s
 
+code/server_main.o: code/server_main.cpp.o
+.PHONY : code/server_main.o
+
+# target to build an object file
+code/server_main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/code/server_main.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_app.dir/build.make CMakeFiles/run_app.dir/code/server_main.cpp.o
+.PHONY : code/server_main.cpp.o
+
+code/server_main.i: code/server_main.cpp.i
+.PHONY : code/server_main.i
+
+# target to preprocess a source file
+code/server_main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/code/server_main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_app.dir/build.make CMakeFiles/run_app.dir/code/server_main.cpp.i
+.PHONY : code/server_main.cpp.i
+
+code/server_main.s: code/server_main.cpp.s
+.PHONY : code/server_main.s
+
+# target to generate assembly for a file
+code/server_main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/code/server_main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_app.dir/build.make CMakeFiles/run_app.dir/code/server_main.cpp.s
+.PHONY : code/server_main.cpp.s
+
+code/trie_server.o: code/trie_server.cpp.o
+.PHONY : code/trie_server.o
+
+# target to build an object file
+code/trie_server.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/code/trie_server.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_app.dir/build.make CMakeFiles/run_app.dir/code/trie_server.cpp.o
+.PHONY : code/trie_server.cpp.o
+
+code/trie_server.i: code/trie_server.cpp.i
+.PHONY : code/trie_server.i
+
+# target to preprocess a source file
+code/trie_server.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/code/trie_server.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_app.dir/build.make CMakeFiles/run_app.dir/code/trie_server.cpp.i
+.PHONY : code/trie_server.cpp.i
+
+code/trie_server.s: code/trie_server.cpp.s
+.PHONY : code/trie_server.s
+
+# target to generate assembly for a file
+code/trie_server.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/code/trie_server.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_app.dir/build.make CMakeFiles/run_app.dir/code/trie_server.cpp.s
+.PHONY : code/trie_server.cpp.s
+
 tests/test_proj.o: tests/test_proj.cpp.o
 .PHONY : tests/test_proj.o
 
@@ -304,6 +358,12 @@ help:
 	@echo "... code/TrieNode.o"
 	@echo "... code/TrieNode.i"
 	@echo "... code/TrieNode.s"
+	@echo "... code/server_main.o"
+	@echo "... code/server_main.i"
+	@echo "... code/server_main.s"
+	@echo "... code/trie_server.o"
+	@echo "... code/trie_server.i"
+	@echo "... code/trie_server.s"
 	@echo "... tests/test_proj.o"
 	@echo "... tests/test_proj.i"
 	@echo "... tests/test_proj.s"

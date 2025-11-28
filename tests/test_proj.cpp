@@ -27,37 +27,37 @@ protected:
 };
 
 TEST_F(test_TrieNode, SetGetLeafStatus) {
-  trieNode* a = new trieNode();
-  trieNode* base = new trieNode();
+  TrieNode* a = new TrieNode();
+  TrieNode* base = new TrieNode();
   a->setLeafStatus(true);
   ASSERT_EQ(a->getLeafStatus(), true);
   ASSERT_EQ(base->getLeafStatus(), false);
 };
 
 TEST_F(test_TrieNode, SetGetDeleted) {
-  trieNode* first = new trieNode();
+  TrieNode* first = new TrieNode();
   first->markDeletion(true);
   ASSERT_EQ(first->getDeleteStatus(), true);
 };
 
 TEST_F(test_TrieNode, SetGetPredecessor) {
-  trieNode* second = new trieNode();
-  trieNode* first = new trieNode();
+  TrieNode* second = new TrieNode();
+  TrieNode* first = new TrieNode();
   second->setPredecessor(first);
   ASSERT_EQ(second->getPredecessor(), first);
 };
 
 TEST_F(test_TrieNode, SetGetCoursePtr) {
   Course* csci_5525 = new Course();
-  trieNode* new_node = new trieNode();
+  TrieNode* new_node = new TrieNode();
   new_node->setCoursePtr(csci_5525);
   ASSERT_EQ(new_node->getCoursePtr(), csci_5525);
 };
 
 TEST_F(test_TrieNode, descendantsVector) {
-  trieNode* new_node = new trieNode();
-  trieNode* parent_node = new trieNode();
-  trieNode* child_node = new trieNode();
+  TrieNode* new_node = new TrieNode();
+  TrieNode* parent_node = new TrieNode();
+  TrieNode* child_node = new TrieNode();
   new_node->setPredecessor(parent_node);
   child_node->setPredecessor(new_node);
   new_node->descendants.at(2) = child_node;
@@ -119,14 +119,14 @@ protected:
 
 
 TEST_F(test_Trie, SetGetRoot) {
-  trie a = trie();
-  trieNode* new_root = new trieNode();
-  a.setRoot(new_root);
-  ASSERT_EQ(a.getRoot(), new_root);
+  Trie a = Trie();
+  TrieNode* root_node= new TrieNode();
+  a.setRoot(root_node);
+  ASSERT_EQ(a.getRoot(), root_node);
 };
 
 TEST_F(test_Trie, readData) {
-  trie a= trie();
+  Trie a = Trie();
   //string filename = "../static/test_cirt_data.csv"; not working
   //string filename = "code/static/test_cirt_data.csv";
   string filename = "../code/static/test_cirt_data.csv";
@@ -136,7 +136,7 @@ TEST_F(test_Trie, readData) {
 
 TEST_F(test_Trie, createCourseFunction)
 {
-  trie a = trie();
+  Trie a = Trie();
   //string filename = "../static/test_cirt_data.csv"; not working
   //string filename = "code/static/test_cirt_data.csv";
   string filename = "../code/static/test_cirt_data.csv";
@@ -145,8 +145,8 @@ TEST_F(test_Trie, createCourseFunction)
 
 TEST_F(test_Trie, searchTrie)
 {
-  trie a = trie();
-  trieNode* root_node= new trieNode();
+  Trie a = Trie();
+  TrieNode* root_node= new TrieNode();
   a.setRoot(root_node);
 
   string filename = "../code/static/test_cirt_data.csv";
@@ -158,8 +158,8 @@ TEST_F(test_Trie, searchTrie)
 
 TEST_F(test_Trie, insertNode)
 {
-  trie a = trie();
-  trieNode* root_node= new trieNode();
+  Trie a = Trie();
+  TrieNode* root_node= new TrieNode();
   a.setRoot(root_node);
   
   string filename = "../code/static/test_cirt_data.csv";
@@ -171,8 +171,8 @@ TEST_F(test_Trie, insertNode)
 
 TEST_F(test_Trie, removeNode)
 {
-  trie a = trie();
-  trieNode* root_node= new trieNode();
+  Trie a = Trie();
+  TrieNode* root_node= new TrieNode();
   a.setRoot(root_node);
 
   string filename = "../code/static/test_cirt_data.csv";
@@ -185,8 +185,8 @@ TEST_F(test_Trie, removeNode)
 
 TEST_F(test_Trie, buildTrie)
 {
-  trie a = trie();
-  trieNode* root_node = new trieNode();
+  Trie a = Trie();
+  TrieNode* root_node= new TrieNode();
   a.setRoot(root_node);
   string filename = "../code/static/test_cirt_data.csv";
   a.buildTrie(filename);
@@ -196,8 +196,8 @@ TEST_F(test_Trie, buildTrie)
 
 TEST_F(test_Trie, SetGetNumWords)
 {
-  trie a = trie();
-  trieNode* root_node = new trieNode();
+  Trie a = Trie();
+  TrieNode* root_node= new TrieNode();
   a.setRoot(root_node);
 
   string filename = "../code/static/test_cirt_data.csv";
@@ -208,8 +208,8 @@ TEST_F(test_Trie, SetGetNumWords)
 
 TEST_F(test_Trie, helperFunctionTest_SwapCodeforPtr)
 {
-  trie a = trie();
-  trieNode* root_node = new trieNode();
+  Trie a = Trie();
+  TrieNode* root_node= new TrieNode();
   a.setRoot(root_node);
   string filename = "../code/static/test_cirt_data.csv";
   a.buildTrie(filename);
@@ -230,8 +230,8 @@ TEST_F(test_Trie, helperFunctionTest_SwapCodeforPtr)
 
 TEST_F(test_Trie, autoComplete)
 {
-  trie a = trie();
-  trieNode* root_node = new trieNode();
+  Trie a = Trie();
+  TrieNode* root_node= new TrieNode();
   a.setRoot(root_node);
   string filename = "../code/static/test_cirt_data.csv";
   a.buildTrie(filename);

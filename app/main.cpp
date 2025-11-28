@@ -8,10 +8,11 @@ using namespace std;
 
 int main(){
     
-  trie a = trie();
-  trieNode* root_node = new trieNode();
+  Trie a = Trie();
+  TrieNode* root_node = new TrieNode();
   a.setRoot(root_node);
-  a.buildTrie();
+  string filename = "./code/static/test_cirt_data.csv";
+  a.buildTrie(filename);
   //a.getUserInput();
 
   return 0;

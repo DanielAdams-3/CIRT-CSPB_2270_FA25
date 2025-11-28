@@ -11,6 +11,8 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/jovyan/2270/CIRT-CSPB_2270_FA25/code/Course.cpp" "CMakeFiles/run_tests.dir/code/Course.cpp.o" "gcc" "CMakeFiles/run_tests.dir/code/Course.cpp.o.d"
   "/home/jovyan/2270/CIRT-CSPB_2270_FA25/code/Trie.cpp" "CMakeFiles/run_tests.dir/code/Trie.cpp.o" "gcc" "CMakeFiles/run_tests.dir/code/Trie.cpp.o.d"
   "/home/jovyan/2270/CIRT-CSPB_2270_FA25/code/TrieNode.cpp" "CMakeFiles/run_tests.dir/code/TrieNode.cpp.o" "gcc" "CMakeFiles/run_tests.dir/code/TrieNode.cpp.o.d"
+  "/home/jovyan/2270/CIRT-CSPB_2270_FA25/code/server_main.cpp" "CMakeFiles/run_tests.dir/code/server_main.cpp.o" "gcc" "CMakeFiles/run_tests.dir/code/server_main.cpp.o.d"
+  "/home/jovyan/2270/CIRT-CSPB_2270_FA25/code/trie_server.cpp" "CMakeFiles/run_tests.dir/code/trie_server.cpp.o" "gcc" "CMakeFiles/run_tests.dir/code/trie_server.cpp.o.d"
   "/home/jovyan/2270/CIRT-CSPB_2270_FA25/tests/test_proj.cpp" "CMakeFiles/run_tests.dir/tests/test_proj.cpp.o" "gcc" "CMakeFiles/run_tests.dir/tests/test_proj.cpp.o.d"
   )
 

@@ -125,12 +125,42 @@ CMakeFiles/run_tests.dir/code/TrieNode.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/run_tests.dir/code/TrieNode.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jovyan/2270/CIRT-CSPB_2270_FA25/code/TrieNode.cpp -o CMakeFiles/run_tests.dir/code/TrieNode.cpp.s
 
+CMakeFiles/run_tests.dir/code/server_main.cpp.o: CMakeFiles/run_tests.dir/flags.make
+CMakeFiles/run_tests.dir/code/server_main.cpp.o: ../code/server_main.cpp
+CMakeFiles/run_tests.dir/code/server_main.cpp.o: CMakeFiles/run_tests.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jovyan/2270/CIRT-CSPB_2270_FA25/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/run_tests.dir/code/server_main.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/run_tests.dir/code/server_main.cpp.o -MF CMakeFiles/run_tests.dir/code/server_main.cpp.o.d -o CMakeFiles/run_tests.dir/code/server_main.cpp.o -c /home/jovyan/2270/CIRT-CSPB_2270_FA25/code/server_main.cpp
+
+CMakeFiles/run_tests.dir/code/server_main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/run_tests.dir/code/server_main.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jovyan/2270/CIRT-CSPB_2270_FA25/code/server_main.cpp > CMakeFiles/run_tests.dir/code/server_main.cpp.i
+
+CMakeFiles/run_tests.dir/code/server_main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/run_tests.dir/code/server_main.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jovyan/2270/CIRT-CSPB_2270_FA25/code/server_main.cpp -o CMakeFiles/run_tests.dir/code/server_main.cpp.s
+
+CMakeFiles/run_tests.dir/code/trie_server.cpp.o: CMakeFiles/run_tests.dir/flags.make
+CMakeFiles/run_tests.dir/code/trie_server.cpp.o: ../code/trie_server.cpp
+CMakeFiles/run_tests.dir/code/trie_server.cpp.o: CMakeFiles/run_tests.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jovyan/2270/CIRT-CSPB_2270_FA25/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/run_tests.dir/code/trie_server.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/run_tests.dir/code/trie_server.cpp.o -MF CMakeFiles/run_tests.dir/code/trie_server.cpp.o.d -o CMakeFiles/run_tests.dir/code/trie_server.cpp.o -c /home/jovyan/2270/CIRT-CSPB_2270_FA25/code/trie_server.cpp
+
+CMakeFiles/run_tests.dir/code/trie_server.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/run_tests.dir/code/trie_server.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jovyan/2270/CIRT-CSPB_2270_FA25/code/trie_server.cpp > CMakeFiles/run_tests.dir/code/trie_server.cpp.i
+
+CMakeFiles/run_tests.dir/code/trie_server.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/run_tests.dir/code/trie_server.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jovyan/2270/CIRT-CSPB_2270_FA25/code/trie_server.cpp -o CMakeFiles/run_tests.dir/code/trie_server.cpp.s
+
 # Object files for target run_tests
 run_tests_OBJECTS = \
 "CMakeFiles/run_tests.dir/tests/test_proj.cpp.o" \
 "CMakeFiles/run_tests.dir/code/Course.cpp.o" \
 "CMakeFiles/run_tests.dir/code/Trie.cpp.o" \
-"CMakeFiles/run_tests.dir/code/TrieNode.cpp.o"
+"CMakeFiles/run_tests.dir/code/TrieNode.cpp.o" \
+"CMakeFiles/run_tests.dir/code/server_main.cpp.o" \
+"CMakeFiles/run_tests.dir/code/trie_server.cpp.o"
 
 # External object files for target run_tests
 run_tests_EXTERNAL_OBJECTS =
@@ -139,10 +169,12 @@ run_tests: CMakeFiles/run_tests.dir/tests/test_proj.cpp.o
 run_tests: CMakeFiles/run_tests.dir/code/Course.cpp.o
 run_tests: CMakeFiles/run_tests.dir/code/Trie.cpp.o
 run_tests: CMakeFiles/run_tests.dir/code/TrieNode.cpp.o
+run_tests: CMakeFiles/run_tests.dir/code/server_main.cpp.o
+run_tests: CMakeFiles/run_tests.dir/code/trie_server.cpp.o
 run_tests: CMakeFiles/run_tests.dir/build.make
 run_tests: /usr/lib/x86_64-linux-gnu/libgtest.a
 run_tests: CMakeFiles/run_tests.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/jovyan/2270/CIRT-CSPB_2270_FA25/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable run_tests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/jovyan/2270/CIRT-CSPB_2270_FA25/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable run_tests"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/run_tests.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
