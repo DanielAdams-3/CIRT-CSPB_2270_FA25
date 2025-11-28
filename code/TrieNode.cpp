@@ -8,6 +8,7 @@ trieNode::trieNode()
     predecessor=nullptr;
     isLeaf=false; 
     to_delete = false;
+    prefix_finder = false;
     
     for (long unsigned int i=0;i<38;i++)
     {
@@ -28,6 +29,14 @@ void trieNode::markDeletion(bool new_status)
 bool trieNode::getDeleteStatus()
 {
     return this->to_delete;
+}
+bool trieNode::getPrefixFlag()
+{
+    return this->prefix_finder;
+}
+void trieNode::setPrefixFlag(bool new_flag_val)
+{
+    this->prefix_finder=new_flag_val;
 }
 trieNode* trieNode::getPredecessor()
 {

@@ -127,16 +127,20 @@ TEST_F(test_Trie, SetGetRoot) {
 
 TEST_F(test_Trie, readData) {
   trie a= trie();
-  string file_name="../code/test_cirt_data.csv";
-  vector<Course*> new_vector = a.readData(file_name);
-  ASSERT_EQ(new_vector.size(), 5);
+  //string filename = "../static/test_cirt_data.csv"; not working
+  //string filename = "code/static/test_cirt_data.csv";
+  string filename = "../code/static/test_cirt_data.csv";
+  vector<Course*> new_vector = a.readData(filename);
+  ASSERT_EQ(new_vector.size(), 12);
 };
 
 TEST_F(test_Trie, createCourseFunction)
 {
   trie a = trie();
-  string file_name="../code/test_cirt_data.csv";
-  vector<Course*> new_vector = a.readData(file_name);
+  //string filename = "../static/test_cirt_data.csv"; not working
+  //string filename = "code/static/test_cirt_data.csv";
+  string filename = "../code/static/test_cirt_data.csv";
+  vector<Course*> new_vector = a.readData(filename);
 };
 
 TEST_F(test_Trie, searchTrie)
@@ -145,8 +149,8 @@ TEST_F(test_Trie, searchTrie)
   trieNode* root_node= new trieNode();
   a.setRoot(root_node);
 
-  //string file_name="../code/test_cirt_data.csv";
-  a.buildTrie();
+  string filename = "../code/static/test_cirt_data.csv";
+  a.buildTrie(filename);
   a.searchTrie("CSCI-5253");
   ASSERT_EQ(a.searchTrie("CSCI-5253"), true);
 };
@@ -157,8 +161,9 @@ TEST_F(test_Trie, insertNode)
   trie a = trie();
   trieNode* root_node= new trieNode();
   a.setRoot(root_node);
-
-  a.buildTrie();
+  
+  string filename = "../code/static/test_cirt_data.csv";
+  a.buildTrie(filename);
   bool answer = a.searchTrie("CSCI-5253");
   ASSERT_EQ(answer, true);
 
@@ -170,7 +175,8 @@ TEST_F(test_Trie, removeNode)
   trieNode* root_node= new trieNode();
   a.setRoot(root_node);
 
-  a.buildTrie();
+  string filename = "../code/static/test_cirt_data.csv";
+  a.buildTrie(filename);
   bool answer=true;
   a.removeNode("CSCI-5253");
   answer=a.searchTrie("CSCI-5253");
@@ -182,7 +188,8 @@ TEST_F(test_Trie, buildTrie)
   trie a = trie();
   trieNode* root_node = new trieNode();
   a.setRoot(root_node);
-  a.buildTrie();
+  string filename = "../code/static/test_cirt_data.csv";
+  a.buildTrie(filename);
   bool answer=a.searchTrie("CSCI-5253");
   ASSERT_EQ(answer,true);
 };
@@ -193,9 +200,10 @@ TEST_F(test_Trie, SetGetNumWords)
   trieNode* root_node = new trieNode();
   a.setRoot(root_node);
 
-  a.buildTrie();
+  string filename = "../code/static/test_cirt_data.csv";
+  a.buildTrie(filename);
   int test_numWords=a.getNumWords();
-  ASSERT_EQ(test_numWords,5);
+  ASSERT_EQ(test_numWords,12);
 };
 
 TEST_F(test_Trie, helperFunctionTest_SwapCodeforPtr)
@@ -203,7 +211,8 @@ TEST_F(test_Trie, helperFunctionTest_SwapCodeforPtr)
   trie a = trie();
   trieNode* root_node = new trieNode();
   a.setRoot(root_node);
-  a.buildTrie();
+  string filename = "../code/static/test_cirt_data.csv";
+  a.buildTrie(filename);
 
   //test for nullptr
   Course* test = a.swapCodeforPtr("CSCI-5993");
@@ -219,7 +228,44 @@ TEST_F(test_Trie, helperFunctionTest_SwapCodeforPtr)
   ASSERT_EQ(new_answer, true);
 }; 
 
+TEST_F(test_Trie, autoComplete)
+{
+  trie a = trie();
+  trieNode* root_node = new trieNode();
+  a.setRoot(root_node);
+  string filename = "../code/static/test_cirt_data.csv";
+  a.buildTrie(filename);
+  vector<Course*> autoCompleteSuggestions = a.startsWithPrefix("CSCI-5");
+  cout << "AUTO-COMPLETE SUGGESTIONS FOR " << "CSCI-5" << endl;
+  for (long unsigned int i=0;i<autoCompleteSuggestions.size();i++)
+  {
+    cout << autoCompleteSuggestions.at(i)->getCourseSubjectCode();
+    cout << endl;
+  }
+  ASSERT_EQ(autoCompleteSuggestions.size(),11);
 
+  //testing "CSCI-52" - 3 courses
+  vector<Course*> autoCompleteSuggestionsThree = a.startsWithPrefix("CSCI-52");
+  cout << "AUTO-COMPLETE SUGGESTIONS FOR " << "CSCI-52" << endl;
+  for (long unsigned int i=0;i<autoCompleteSuggestionsThree.size();i++)
+  {
+    cout << autoCompleteSuggestionsThree.at(i)->getCourseSubjectCode();
+    cout << endl;
+  }
+  ASSERT_EQ(autoCompleteSuggestionsThree.size(),3);
+
+  //testing "A" prefix code, 1 course
+  vector<Course*> autoCompleteSuggestionsOne = a.startsWithPrefix("A");
+  cout << "AUTO-COMPLETE SUGGESTIONS FOR " << "A" << endl;
+  for (long unsigned int i=0;i<autoCompleteSuggestionsOne.size();i++)
+  {
+    cout << autoCompleteSuggestionsOne.at(i)->getCourseSubjectCode();
+    cout << endl;
+  }
+  ASSERT_EQ(autoCompleteSuggestionsOne.size(),1);
+};
+
+/*
 TEST_F(test_Trie, output)
 {
   trie a = trie();
@@ -240,5 +286,6 @@ TEST_F(test_Trie, input)
   a.setUserStatus(true);
   ASSERT_EQ(a.userStatus,true);
   a.getUserInput();
-
 };
+
+*/

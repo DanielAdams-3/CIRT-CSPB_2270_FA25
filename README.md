@@ -43,11 +43,9 @@ number of characters in the key. Since subject codes are limited to nine string 
 (see exception below), search will, in most cases, be quick.
 
 ## Limitations
-### Prefix-based Autocomplete
-A major benefift of Prefix trees is that auto-complete is easier to implement.
-For any number of characters provided, we can easily search the tree and return the
-first or all results that start with the provided characters, or nothing if not provided.
-I hope to add a secondary search feature that lets users input 
+### Prefix-based Autocomplete = IMPLEMENTED - see notesbelow
+//DONE
+A major benefit of Prefix trees is that auto-complete is easier to implement. For any number of characters provided, we can easily search the tree and return the first or all results that start with the provided characters, or nothing if not provided. I hope to add a secondary search feature that lets users input 1-8 characters, inclusive, and the user will see the cours subject codes and course titles for any matching courses. They will then be able to choose which, if any, they want to see. Any matching information will be provided and the user can select which option they want to have output.
 
 ### Section-differentiated courses
 A challenge in implementing the trie is the (rare) circumstance where multiple courses
@@ -72,6 +70,9 @@ I would, within the trie structure, contain a 'dictionary' map structure where e
  then call the search and output functions based on the 'value' of the found key:value pair,
  the course subject code.
 
+### Change trie() to Trie()
+//TODO
+
 ## Technical/Learning Hurdles
 I need to learn how to implement a trie in C++, as this was not covered in a homework
 assignment. I also need to learn how to implement file streams to read the pre-
@@ -86,32 +87,26 @@ and any related functions.
   zyBook CSPB 2270: C++ Refresher - 9.5, 9.6, 9.7 File input and output
   Wikipedia – Trie
   Geeks4Geeks – Trie Data Structures
-  //https://www.geeksforgeeks.org/cpp/traversing-a-map-or-unordered_map-in-cpp-stl/
-  //https://www.geeksforgeeks.org/cpp/how-to-access-value-in-a-map-using-key-in-cpp/
-  //https://learn.zybooks.com/zybook/COLORADOCSPB2270DataStructuresGuinnFall2025/chapter/14/section/1
-  //https://www.geeksforgeeks.org/cpp/map-insert-in-c-stl/
-  //https://www.geeksforgeeks.org/cpp/stringstream-c-applications/
-  //https://www.geeksforgeeks.org/cpp/how-to-read-data-from-csv-file-to-a-2d-array-in-cpp/
-  //https://www.geeksforgeeks.org/cpp/getline-string-c/
-  //https://www.geeksforgeeks.org/cpp/file-handling-c-classes/
-  //https://www.geeksforgeeks.org/cpp/vector-erase-in-cpp-stl/
-  //https://en.cppreference.com/w/cpp/string/basic_string/begin
-  //https://www.geeksforgeeks.org/cpp/string-concatenation-in-cpp/
-  //https://cplusplus.com/reference/string/string/end/
-  //https://www.geeksforgeeks.org/cpp/stdstringinsert-in-c/
-  //https://en.cppreference.com/w/cpp/string/basic_string/insert
-  //https://www.geeksforgeeks.org/cpp/traversing-a-map-or-unordered_map-in-cpp-stl/
-  //https://en.cppreference.com/w/cpp/container/map/begin.html
+  #### https://www.geeksforgeeks.org/cpp/traversing-a-map-or-unordered_map-in-cpp-stl/
+  #### https://www.geeksforgeeks.org/cpp/how-to-access-value-in-a-map-using-key-in-cpp/
+  #### https://learn.zybooks.com/zybook/COLORADOCSPB2270DataStructuresGuinnFall2025/chapter/14/section/1
+  #### https://www.geeksforgeeks.org/cpp/map-insert-in-c-stl/
+  #### https://www.geeksforgeeks.org/cpp/stringstream-c-applications/
+  #### https://www.geeksforgeeks.org/cpp/how-to-read-data-from-csv-file-to-a-2d-array-in-cpp/
+  #### https://www.geeksforgeeks.org/cpp/getline-string-c/
+  #### https://www.geeksforgeeks.org/cpp/file-handling-c-classes/
+  #### https://www.geeksforgeeks.org/cpp/vector-erase-in-cpp-stl/
+  #### https://en.cppreference.com/w/cpp/string/basic_string/begin
+  #### https://www.geeksforgeeks.org/cpp/string-concatenation-in-cpp/
+  #### https://cplusplus.com/reference/string/string/end/
+  #### https://www.geeksforgeeks.org/cpp/stdstringinsert-in-c/
+  #### https://en.cppreference.com/w/cpp/string/basic_string/insert
+  #### https://www.geeksforgeeks.org/cpp/traversing-a-map-or-unordered_map-in-cpp-stl/
+  #### https://en.cppreference.com/w/cpp/container/map/begin.html
+  #### https://www.geeksforgeeks.org/dsa/auto-complete-feature-using-trie/
   
-
-## Errors I encountered and how I resolved them
-The primary issue was procedural. Because I did not physically map the relationship between
-the Node and the Course classes more clearly during ideation and planning phases,
-I ended up with some erroneous understandings that I had to address during implementation.
-This led to taking an extra few hours collectively to correct various errors and remove superfluous functions and data members.
-For example, when I first created the Nodes, i thought the course was initially going tob e directly stored in the leaf nodes.
-However, this would have made the nodes bloated and more difficult to separate the ndoes from the courses when i read in data from the file.
-So I separated it out and the final structure is much cleaner and easie to understand but was hard at first.
+## Errors Encountered and How I Resolved Them
+The primary issue was procedural. Because I did not physically map the relationship between the Node and the Course classes more clearly during ideation and planning phases, I ended up with some erroneous understandings that I had to address during implementation. This led to taking an extra few hours collectively to correct various errors and remove superfluous functions and data members. For example, when I first created the Nodes, i thought the course was initially going tob e directly stored in the leaf nodes. However, this would have made the nodes bloated and more difficult to separate the ndoes from the courses when i read in data from the file. So I separated it out and the final structure is much cleaner and easie to understand but was hard at first.
 
 As with previous assignments, there was some difficulty in reading in string data from a file but thanks to the cpp documentation I will list in the resources, this issue was relatively quickly resolved. I also addressed this by doing data preparation beforehand. Since many strings in the course descriptions and coures notes contain commas relying on comma-separated values alone to distinguish values we read in from the csv file, I added a '*' character at the end of each data value to facilitate easier reading.
 
@@ -146,3 +141,22 @@ I made a bad design decision and corrected it based on where I put the following
 Originally, I deleted all nodes related to a course (that is to say, If a node had 1 descendnat and it was the one I deleted, I would delete that node too.
 
 Instead, I just marked the doom_node as a non-leaf and made the coursePTR point to nullptr. The insert and remove and search always check for isLeaf and for the CoursePTR information, so we can't accidentally 'arrive' at a node. In this way, we mimic an efficiency of the Huffman code process, where we mark deleted nodes 'empty after deletion', we mark deleted nodes in a similar way.
+
+I encontered a series of issues with string input and output but they were relatively simple to resolve. THe isues I faced were due primarily to lack of familiarity with stringstream manipulation and the <iomanip> library. After a couple of hours fixing bugs related to output removing whitespace from the beginning and end of strings, the output started to consistently work as expected. 
+
+One function that gave me more difficulty was word wrapping. The issue was identifying how to best calculate the conditions for when we should insert a newline into the stringstream that would ultimately be stored in string and then output to the console. At first, I tried to directly compare the line width with a counter, but this resulted in a generally consistent output but did not stop certain lines from exceeding the line width parameter. I resolved the issue by calculating a 'gap_to_end' variable and if the distance to the end of the current line was smaller than the length of the next word, the function inserts a newline character to the string stream. This resolved the issue.
+
+ISSUE that was resolved - i did not properly include each .cpp file. I also had to remove the -O2 flag, system couldn't handle it in VS code for some reason. 
+
+CURRENT ISSUE   -
+  file not open
+  Starting trie HTTP server on http://localhost:8080
+  Open: http://localhost:8080/index.html
+
+So it's running but any lookup gives me "Request failed: TypeError: NetworkError when attempting to fetch resource."
+//https://medium.com/vinh-rocks/how-to-handle-networkerror-when-using-fetch-ff2663220435
+
+
+SOLVED - Prefix Autocomplete
+In working to solve Prefix Autocomplete, the issue I encountered was that multiple calls yielded no results after the first call. Since multiple calls in a given 'session' is part of the desired functionality, I needed to debug this issue. The issue was simply that my method of tracking nodes I had 'searched' for possible Course matches, relied on a bool variable for prefix searches. If the flag was true, we had already visited it and it wouldn't be searched for a course match. 
+However, after the first call, the flags were never reset because the tree was still active. So I added a simple line at the end of the search where each visited node was marked as 'false' and could be visited again.

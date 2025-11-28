@@ -12,8 +12,7 @@ int main(){
   trieNode* root_node = new trieNode();
   a.setRoot(root_node);
   a.buildTrie();
+  //a.getUserInput();
 
-  a.getUserInput();
-
-    return 0;
+  return 0;
 }

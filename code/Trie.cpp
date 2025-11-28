@@ -64,6 +64,18 @@ void trie::setNumWords (int new_val)
 {
     this->numWords=new_val;
 }
+
+bool trie::contains(string word)
+{
+    if (searchTrie(word) == true)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
 bool trie::searchTrie(string course_to_find)
 {
     bool answer = false;
@@ -238,14 +250,7 @@ void trie::removeNode(string doom_course_subject_code)
             this->setNumWords(this->getNumWords() - 1);
         }
     }
-
 }
-/*
-bool trie::startsWithPrefix(string prefix)
-{
-    bool answer = false;
-    return answer;
-}*/
 
 vector<Course*> trie::readData(string file_name)
 {
@@ -253,18 +258,21 @@ vector<Course*> trie::readData(string file_name)
 
     string all_data_as_string="";
     ifstream readf;
-    readf.open(file_name);
+    readf.open(file_name); //  "/code/static/test_cirt_data.csv" 
 
-    //error handling
+    //error handling --
     if (readf.is_open() != true)
     {
-        cout << "file not open" << endl;
+        cout << "readData error: file not open - check filename" << endl;
         return courses_to_insert_into_trie;
     }
+
     if (readf.good() != true)
     {
         cout << "stream error" << endl;
     }
+
+
     //read all data into one big line; we'll use string streams later to split it up by ',' and endline.
     while(readf.eof() != true)
     {
@@ -349,14 +357,115 @@ vector<Course*> trie::readData(string file_name)
     return courses_to_insert_into_trie;
 }
 
-void trie::buildTrie()
+bool trie::load(const string& filename)
 {
-    vector<Course*> new_courses = readData("../code/test_cirt_data.csv");
+    buildTrie(filename);
+    if (this->getNumWords() >0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void trie::buildTrie(string filename)
+{
+    //string filename = "../static/test_cirt_data.csv"; not working
+    //string filename = "code/static/test_cirt_data.csv"; //not orking
+    //string filename = "../code/static/test_cirt_data.csv"; //ONLY WORKS FOR MY TEST
+    vector<Course*> new_courses = readData(filename);
 
     for (long unsigned int i=0;i<new_courses.size();i++)
     {
         Course* cursor=new_courses.at(i);
         this->insertNode(cursor);
+    }
+}
+
+vector<string> trie::autocomplete(const string& prefix, size_t max_results)
+{
+    vector<string> suggestions;
+    vector<Course*> coursePTRresults = startsWithPrefix(prefix);
+    for (long unsigned int i=0;i<coursePTRresults.size() && i<max_results;i++)
+    {
+        suggestions.push_back(coursePTRresults.at(i)->getCourseSubjectCode());
+    }
+    return suggestions;
+}
+
+
+vector<Course*> trie::startsWithPrefix(string prefix)
+{
+    //DONE
+    vector<Course*> search_results;
+
+    //return the spot at which the prefix provided stops, recursively add all descendants we haven't visited
+    //to a vector, and if they match the prefix, add them to the vector search_results; we can do this recursively
+    trieNode* cursor=this->getRoot();
+    vector<trieNode*> searchForMatches;
+    prefixFinder(cursor, searchForMatches);
+
+    //now that we have the search node list
+    for (long unsigned int i=0;i<searchForMatches.size();i++)
+    {
+        trieNode* subCursor=searchForMatches.at(i);
+        bool differences = false;
+        if (subCursor->getCoursePtr() != nullptr)
+        {
+            //compare the CoursePtr's subject code to what we have of the prefix. 
+            //if there are no differences by the time our prefix runs out,
+            for (long unsigned int i=0;i<prefix.length();i++)
+            {
+                if (prefix.at(i) != subCursor->getCoursePtr()->getCourseSubjectCode().at(i))
+                {
+                    differences = true;
+                }
+            }
+        }
+        //for each one that has no differences, add subCursor to the search_results;
+        if (differences == false && subCursor->getCoursePtr() != nullptr)
+        {
+            search_results.push_back(subCursor->getCoursePtr());
+
+        }
+    }
+    for (long unsigned int i=0;i<searchForMatches.size();i++)
+    {
+        searchForMatches.at(i)->setPrefixFlag(false); //fix this for future searches
+    }
+    return search_results;
+} 
+
+//helper to recursively search for CoursePtrs
+void trie::prefixFinder(trieNode* currentNode, vector<trieNode*>& searchForMatches)
+{
+    trieNode* cursor = currentNode;
+    for (long unsigned int i=0;i<cursor->descendants.size();i++)
+    {
+        if (cursor->descendants.at(i) != nullptr && cursor->descendants.at(i)->getPrefixFlag() != true)
+        {
+            if (cursor->descendants.at(i) != nullptr)
+            {
+                trieNode* subCursor = cursor->descendants.at(i);
+                for (long unsigned int j=0;j<subCursor->descendants.size();j++)
+                {
+                    if (subCursor->getPrefixFlag() != true)
+                    {
+                        searchForMatches.push_back(subCursor); //add it to the list to compare
+                        subCursor->setPrefixFlag(true); //make sure we don't add it again
+                        prefixFinder(subCursor, searchForMatches); //call it on its descendants
+                    }
+                }
+            }
+        }
+    }
+    //just in case we missed it.
+    if (cursor->getPrefixFlag() != true)
+    {
+        searchForMatches.push_back(cursor);
+        cursor->setPrefixFlag(true);
     }
 }
 
@@ -440,7 +549,6 @@ void trie::outputCourseData(string course_subject_code)
     //OUTPUT MESSAGE TO USER
     cout << LINE_WIDTH_40 << endl;
     cout << "Course found: " << course_subject_code << endl;
-    cout << "Loading..." << endl;
 
     //PREPARE FOR OUTPUT
     string course_subject="";
@@ -564,16 +672,16 @@ void trie::getUserInput()
     cout << "MENU" << endl;
     cout << "-----------------------------------------" << endl;
     cout << "SEARCH:" << endl;
-    cout << "--1-- Enter the 4-digit subject code (eg 'CSCI')" << endl;
-    cout << "--2-- Enter a dash or hyphen (eg '-')" << endl;
-    cout << "--3-- Enter the 4-digit course number (eg '5832')" << endl;
-    cout << "--4-- Press the Enter key" << endl;
-    cout << "----- Example: CSCI 5832'" << endl;
+    cout << "--1-- Add the 4-digit subject code ('CSCI')" << endl;
+    cout << "--2-- Add a dash or hyphen: -" << endl;
+    cout << "--3-- Add the 4-digit course number ('5832')" << endl;
+    cout << "--4-- Press Enter" << endl;
+    cout << "----- Example: CSCI-5832'" << endl;
     cout << "QUIT:" << endl;
     cout << "--1-- Press Q" << endl;
     cout << "--2-- Press Enter" << endl;
     cout << "-----------------------------------------" << endl;
-    cout << "Waiting for user input...---->";
+    cout << "Waiting for user input...---->  ";
 
     do
     {
@@ -585,13 +693,24 @@ void trie::getUserInput()
         else
         {
             //ERROR HANDLING
-            if (input.length() < 7 || input.length() >9)
+            if (input.length() < 1 || input.length() >9)
             {
                 cout << "Incorrect length provided. Please use 4 digits for the subject area, 1 digit for the dash/hyphen, and 4 digits for the course number." << endl;
             }
+            /*
+            if (input.length()<9)
+            {
+                vector<Course*> auto_complete_suggestions=startsWithPrefix(input);
+                if (auto_complete_suggestions.size() <= 0)
+                {
+                    cout << "No courses match the provided code. Please try again later." << endl;
+                    return; //DELETE LATER - TODO
+                }
+            }
+            */
 
             //if they just put a space instead
-            if (input.at(5) == ' ')
+            if (input.length() == 8 && input.at(5) == ' ')
             {
                 input.at(5) = '-';
             }

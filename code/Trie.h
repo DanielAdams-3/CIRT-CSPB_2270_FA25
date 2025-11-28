@@ -28,7 +28,9 @@ class trie{
 
         //search/traversal function to help with insert_node as well
         bool searchTrie(string course_to_find);
-        
+        //load calls SearchTrie to save me time.
+        bool contains(string word);
+
         //this function creates and inserts a new node into the tree in the tree
         //if the searchTrie(string course_to_find) function returns false
         void insertNode(Course* course_to_add); //be sure to call searchTrie
@@ -36,11 +38,18 @@ class trie{
 
         //we build the Trie as we read data from csv fstream
         //once this is done, we will be able to interact with the user
-        void buildTrie(); 
+        void buildTrie(string filename); 
+        //helper function for the server output
+        bool load(const string& filename);
+        //load is what we're doing to replace buildTrie();
 
-        /*auto-complete options let's the user pass in a prefix that is less than or equal to the length of every course subject code.
-        bool startsWithPrefix(string prefix);*/
-
+        //this is to help us with output to the server. I don't call this in my output
+        vector<string> autocomplete(const string& prefix, size_t max_results);
+        //auto-complete options let's the user pass in a prefix that is less than or equal to the length of every course subject code.
+        vector<Course*> startsWithPrefix(string prefix);
+        //helper function for auto-complete
+        void prefixFinder(trieNode* currentNode, vector<trieNode*>& searchForMatches);
+        
         //user interaction functions
         void outputCourseData(string course_subject_code);
         void getUserInput();
@@ -53,7 +62,6 @@ class trie{
         ////this one returns a string that has been prepraed for Word wrapping
         ////which is to say, it maintains a conssitent output every given characters
         string consoleOutputWordWrapping(string course_subject_code, const int WIDTH_OF_LINE);
-
 
 };
 
