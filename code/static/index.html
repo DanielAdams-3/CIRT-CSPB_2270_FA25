@@ -45,11 +45,11 @@
 </head>
 <body>
   <h1>Demo - Course Information Retrieval Tool</h1>
-  <p>Enter a Course Subject (e.g., CSCI-5253) and click <strong>GET IT</strong> to see if it is in the trie.</p>
+  <p>Enter a Course Subject (e.g., CSCI-5253) and click <strong>Search</strong> to see if it is in the trie.</p>
 
   <div class="row">
     <input id="wordInput" type="text" placeholder="enter a course..." />
-    <button onclick="lookupWord()">GET 'EM</button>
+    <button onclick="lookupWord()">Search</button>
   </div>
   <div id="result"></div>
 
@@ -72,7 +72,7 @@
       }
       resultDiv.textContent = 'Checking...';
       try {
-        const resp = await fetch('/lookup?q=' + encodeURIComponent(word));
+        const resp = await fetch('lookup?q=' + encodeURIComponent(word)); //removed first forward slash from '/lookup?q=' per instructions from Prof. Guinn 11.28.2025
         if (!resp.ok) {
           const text = await resp.text();
           resultDiv.textContent = 'Error: ' + resp.status + ' ' + resp.statusText + '\\n' + text;
@@ -81,7 +81,7 @@
         const text = await resp.text();
         if (text.startsWith('FOUND ')) {
           const w = text.substring('FOUND '.length);
-          resultDiv.textContent = '“' + w + '” is in the trie.';
+          resultDiv.textContent =w;
         } else if (text.startsWith('NOT_FOUND ')) {
           const w = text.substring('NOT_FOUND '.length);
           resultDiv.textContent = '“' + w + '” is NOT in the trie.';
@@ -102,7 +102,7 @@
       }
       suggestionsDiv.textContent = 'Searching...';
       try {
-        const resp = await fetch('/autocomplete?q=' + encodeURIComponent(prefix));
+        const resp = await fetch('autocomplete?q=' + encodeURIComponent(prefix)); //removed first forward slash from '/lookup?q=' per instructions from Prof. Guinn 11.28.2025
         if (!resp.ok) {
           const text = await resp.text();
           suggestionsDiv.textContent = 'Error: ' + resp.status + ' ' + resp.statusText + '\\n' + text;

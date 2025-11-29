@@ -31,8 +31,75 @@ void start_trie_server(Trie& dict) {
 
         bool found = dict.contains(q); //TRIE FUNCTION
         std::string body = found ? "FOUND " + q : "NOT_FOUND " + q;
+
+        //OUTPUT COURSE DATA
+        //TODO
+        if (found == true)
+        {
+            Course* course_to_print = dict.swapCodeforPtr(q);
+            string courseDescription; //from catalog or classes.colorado.edu
+            string courseNotes; //from classes.colorado.edu
+            string courseTitle; //catalog, etc.
+            string regRestricts; 
+            string courseHours;
+            string skillsLearnt; //from 3. Skills Learnt
+            map<string,string> plansNreqs;
+            string subject;
+            course_to_print->getCourseInfo(courseTitle, courseDescription, courseNotes, subject, regRestricts, plansNreqs, courseHours, skillsLearnt);
+            string newline="\n";
+            string border="------------------------";
+            body.append(newline);
+            body.append("COURSE TITLE");
+            body.append(newline);
+            body.append(courseTitle);
+            body.append(newline);
+            body.append(border);
+            body.append(newline);
+            body.append("DESCRIPTION");
+            body.append(newline);
+            body.append(courseDescription);
+            body.append(newline);
+            body.append(border);
+            body.append(newline);
+            body.append("SKILLS LEARNED");
+            body.append(newline);
+            body.append(skillsLearnt);
+            body.append(newline);
+            body.append(border);
+            body.append(newline);
+            body.append("CREDIT HOURS");
+            body.append(newline);
+            body.append(courseHours);
+            body.append(newline);
+            body.append(border);
+            body.append(newline);
+            body.append("CLASS NOTES");
+            body.append(newline);           
+            body.append(courseNotes);
+            body.append(newline);
+            body.append(border);
+            body.append(newline);
+            body.append("REGISTRATION RESTRICTIONS");
+            body.append(newline);
+            body.append(regRestricts);
+            body.append(newline);
+            body.append(border);
+            body.append(newline);    
+            body.append("DEGREE REQUIREMENTS");
+            body.append(newline);
+            for (auto i  = plansNreqs.begin(); i!= plansNreqs.end(); i++)
+            {
+                body.append(i->first);
+                body.append(": ");
+                body.append(i->second);
+                body.append(newline);
+            }
+            body.append(border);
+            body.append(border);
+        }
         res.set_content(body, "text/plain");
     });
+
 
     // OPTIONAL: autocomplete/prefix search endpoint.
     // To enable this, make sure Trie has a suitable method like:
