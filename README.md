@@ -1,43 +1,107 @@
-# CIRT-CSPB_2270_FA25
-Repository for course project for CSPB 2270, Fall 2025, Prof. Guinn, at CU Boulder. 
-## About the Requirements
-This repository is for my course project for CSPB 2270 Data Structures in Fall 2025.
+# Course Project - Trie (Prefix Tree) Implementation
+Daniel Adams
+CSPB 2270 Data Structures
+Fall 2025 - Prof. Guinn
+## Requirements
+This repository is for my course project.
 The project must be submitted by December 4 at 11:59pm MT.
 Project must include a README or other project description, and/or a video walkthrough/explanation.
 ## Project Summary
 Create a course information retrieval tool (CIRT), based on a trie (prefix tree) data structure.
 The project will output course information based on a user- provided input string (course subject code).
 ## Project Goals
-The goal is to create a rapid retrieval tool for pre-consolidated course information. CIRT
-will use a trie data structure, allowing a user to quickly access a comprehensive set of
-course information with one interface and limited interactions. The trie will store key-value
-pairs, where the key is the course subject code (e.g., CSCI-5981) and the value stored at
-the relevant terminating node will be a Course object containing the stored course
-information. CIRT should quickly output the course information for the course matching the
-user-provided subject code. If the course does not exist, the program will notify the user of
-the failed search.
+The goal is to create a rapid retrieval tool for pre-consolidated course information. CIRT will use a trie data structure, allowing a user to quickly access a comprehensive set of course information with one interface and limited interactions. The trie will store key-value pairs, where the key is the course subject code (e.g., CSCI-5981) and the value stored at the relevant terminating node will be a Course object containing the stored course information. CIRT should quickly output the course information for the course matching the user-provided subject code. If the course does not exist, the program will notify the user of the failed search.
 ## About Tries (Prefix Trees)
-A trie is a multi-pronged tree made up of nodes, each of which contains a string
-character and points to as few as zero child nodes and may point to more than two child
-nodes, unlike a binary tree whose nodes point to at most two child nodes. The traversal
-path, like a HuƯman tree, represents the key to each key-value pair, formed by
-concatenating the string characters, stored in each node on the path, except the leaf node
-which does not contain a character. Instead, it stores the value (Course object). When a
-new entry is added to the trie, new nodes are only created for the key’s string characters
-that diƯer from the existing keys. When a key is removed, the trie only deletes the nodes
-that are unique to the to-be-removed key. Each node will also contain metadata about the
-number of courses in the node’s subtree and a list of those courses to aid in search and
-insertion functions.
+A trie is a multi-pronged tree made up of nodes, each of which represents a string character and points to as few as zero child nodes and may point to more than two child nodes, unlike a binary tree whose nodes point to at most two child nodes. The traversal path, like a HuƯman tree, represents the key to each key-value pair, formed by concatenating the string characters, stored in each node on the path, except the leaf node which points to a Course object. When a new course is added to the trie, new nodes are only created for the key’s string characters that differ from the existing keys. When a key is removed, the trie only deletes the nodes that are unique to the to-be-removed key. Each node will also contain metadata about the number of courses in the node’s subtree and a list of those courses to aid in search and insertion functions.
 ## CIRT Implementation
 My implementation of a Trie is built on 4 components.
-### Custom Class: Course()
-Each course object contains strings for each piece of course information and a map of key-value string pairs for my department's degree plans and how the course applies to them.
-### Custom Class: TrieNode()
-Each node contains a pointer to the previous node in the tree, a descendants vector<TrieNode*> with slots for 38 possible TrieNode 'childs', and a few bool variables to help in insert, search, and removal functions including a bool variable for whether it is a leaf node. Each leaf node contains a pointer to a corresponding course objct that contains the course information to be output upon retrieval.
-### Custom Class: Trie()
-Each Trie contains a root node, 
-### Custom Class: Trie Server() - from Prof. Guinn
+### Class - Course
+  #### private:
+    string courseSubjectCode;
+    string courseDescription;
+    string courseNotes;
+    string courseTitle;
+    string regRestricts; 
+    string courseHours;
+    string skillsLearnt;
+  #### public:
+    Course();
+    ~Course();
+    map<string, string> plansNreqs;
+    void getCourseInfo(string& title, string& description, string& notes, string& subjectCode, string& restricts, map<string,string>& plansandreqs, string& numHours, string& SkillsLearnt);
+    void setCourseInfo(string new_title, string new_description, string new_notes, string new_subjectCode, string new_restricts, string new_plans, string num_hours, string newSkillsLearnt);
+    NOTE - The setter and getter functions also have companion setter/getters for each individual variable which simplifies various assignments and string parsing tasks.
+    map<string, string> getPlansAndReqs();
+    string getCreditHours();
+    string getSkillsLearnt();
+
+### Class - TrieNode
+  #### private:
+    TrieNode* predecessor;
+    bool isLeaf; //true only when we reach the end of the course subject code
+    Course* coursePtr; //for leaf node's only, to point at a dynamically allocated course object
+    bool to_delete;
+    bool prefix_finder;
+        
+  #### public:
+    vector<TrieNode*> descendants;
+    TrieNode();
+    ~TrieNode();
+    void markDeletion(bool new_status);
+    bool getDeleteStatus();
+    TrieNode* getPredecessor();
+    void setPredecessor(TrieNode* new_predecessor);
+    bool getLeafStatus();
+    void setLeafStatus(bool leaf_val);
+    Course* getCoursePtr();
+    void setCoursePtr(Course* new_course_ptr);
+    bool getPrefixFlag();
+    void setPrefixFlag(bool new_flag_val);
+
+### Class - Trie
+  #### private:
+    int numWords; //number of courses in the subtree
+    TrieNode* root;
+    bool userStatus;
+
+  #### public:
+    Trie(); //constructor
+    ~Trie(); //destructor
+    void treeDeleter(TrieNode* subtreeRoot, vector<TrieNode*>& to_delete);
+    void setRoot(TrieNode* new_root);
+    TrieNode* getRoot(); //returns a pointer to the node parameter;
+    void setNumWords(int new_val); //returns the number of courses in the Trie
+    int getNumWords();
+    vector<Course*> readData(string file_name);
+    bool searchTrie(string course_to_find);
+    bool contains(string word);
+    void insertNode(Course* course_to_add); //be sure to call searchTrie
+    void removeNode(string doom_course_subject_code); 
+    void buildTrie(string filename); 
+    bool load(const string& filename);
+    vector<string> autocomplete(const string& prefix, size_t max_results);
+    vector<Course*> startsWithPrefix(string prefix);
+    void prefixFinder(TrieNode* currentNode, vector<TrieNode*>& searchForMatches);
+    Course* swapCodeforPtr(string course_subject_code);
+    NOTE: The following functions were used in an earlier version of output through a Command-Line Interface
+    void outputCourseData(string course_subject_code);
+    void getUserInput();
+    void setUserStatus(bool new_status);
+    bool getUserStatus();
+    string consoleOutputWordWrapping(string course_subject_code, const int WIDTH_OF_LINE);
+
+### Output Files for a Trie Server - with support from Prof. Guinn
 Thanks to Prof. Guinn, I have a series of related files that host a simple front-end web user-interface through JupyterLab. 
+  #### trie_server.h
+    void start_trie_server(Trie& dict);
+  #### server_main.cpp
+  #### httplib.h
+    //Copyright (c) 2025 Yuji Hirose. All rights reserved.
+    //  MIT License
+  #### index.html
+### test_cirt_data.csv
+  This is the dataset I created and formatted for this task.
+
 ## Technical/Learning Hurdles
 I needed to learn how to implement a trie in C++, as this was not covered in a homework assignment. I also needed to learn how to implement file streams to read the pre-consolidated course information from a .csv file, which required me to learn a great deal about parsing strings. Finally, I need to learn how to create my own repository in GitHub and how to structure the project’s files so they ‘build’ like our homework assignments. I will, as part of this, need to build a few test cases to verify correct construction of the trie, Course objects, and any related functions.
 ### References & Resources
@@ -106,21 +170,11 @@ The first attempt at the project relied on a Command-Line interface. The followi
 #### Stripping Whitespace, Data Preprocessing
 I encontered a series of issues with string input and output but they were relatively simple to resolve. These were, admittedly, primarily due to lack of familiarity with stringstream manipulation and the <iomanip> library. After a couple of hours fixing bugs related to output (e.g., removing whitespace from the beginning and end of strings) the output started to consistently work as expected to the console.
 #### Word Wrapping
-One function that gave me more difficulty was word wrapping. The issue was identifying how to best calculate the conditions for when we should insert a newline into the stringstream that would ultimately be stored in string and then output to the console. At first, I tried to directly compare the line width with a counter, but this resulted in a generally consistent output but did not stop certain lines from exceeding the line width parameter. I resolved the issue by calculating a 'gap_to_end' variable and if the distance to the end of the current line was smaller than the length of the next word, the function inserts a newline character to the string stream. This resolved the issue.
+Word wrapping was a challenge. The issue was identifying how to best calculate the conditions for when we should insert a newline into the stringstream that would ultimately be stored in string and then output to the console. At first, I tried to directly compare the line width with a counter, but this resulted in a generally consistent output but did not stop certain lines from exceeding the line width parameter. I resolved the issue by calculating a 'gap_to_end' variable and if the distance to the end of the current line was smaller than the length of the next word, the function inserts a newline character to the string stream. This resolved the issue.
+
 ## Future Work
 The following are areas of improvement that could improve the project.
 ### Section-Differentiated Courses
-A challenge in implementing the trie is the (rare) circumstance where multiple courses
-share a course title. For example, Special Topics courses share a subject code but have
-unique section-level titles. I plan to address this by adding Course object pointers to the
-Special Topics node for each section. In initial implementation, CIRT will output all course
-data for each Special Topics section upon request. Time permitting, I will ask the user for
-input to isolate the desired section title and then output only the relevant section’s
-information.
+A challenge in implementing the trie is the (rare) circumstance where multiple courses share a course title. For example, Special Topics courses share a subject code but have unique section-level titles. I plan to address this by adding Course object pointers to the Special Topics node for each section. In initial implementation, CIRT will output all course data for each Special Topics section upon request. Time permitting, I will ask the user for input to isolate the desired section title and then output only the relevant section’s information.
 ### Search-by-Title / Partial Title Option
-I hope to be able to add a search-by-title option. Instead of remaking a new trie, 
-I would, within the trie structure, contain a 'dictionary' map structure where each
- course is added to the map, where the keys are the Course titles and the values are the subject codes.
- Then when the user provided the course title, I would search the map for a key, and if it existed,
- then call the search and output functions based on the 'value' of the found key:value pair,
- the course subject code.
+I hope to be able to add a search-by-title option. Instead of remaking a new trie, I would, within the trie structure, contain a 'dictionary' map structure where each course is added to the map, where the keys are the Course titles and the values are the subject codes. Then when the user provided the course title, I would search the map for a key, and if it existed, then call the search and output functions based on the 'value' of the found key:value pair, the course subject code.

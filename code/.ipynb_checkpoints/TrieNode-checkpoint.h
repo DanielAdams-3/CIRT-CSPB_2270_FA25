@@ -1,0 +1,37 @@
+#ifndef TRIENODE_H__
+#define TRIENODE_H__
+
+#include "Course.h"
+using namespace std;
+
+class TrieNode {
+    private:
+        TrieNode* predecessor;
+        bool isLeaf; //true only when we reach the end of the course subject code
+        Course* coursePtr; //for leaf node's only, to point at a dynamically allocated course object
+        bool to_delete;
+        bool prefix_finder;
+        
+    public:
+        vector<TrieNode*> descendants; //27 characters long, index 0 = '-' and rest are all capitals
+
+        TrieNode(); //constructor
+        ~TrieNode(); //destructor
+
+        void markDeletion(bool new_status);
+        bool getDeleteStatus();
+
+        TrieNode* getPredecessor(); //returns a pointer to the node's predecessor;
+        void setPredecessor(TrieNode* new_predecessor); //use right after initializing a new node. sets the node's predecessor pointer to what is passed as a parameter;
+        
+        bool getLeafStatus();
+        void setLeafStatus(bool leaf_val);
+        
+        Course* getCoursePtr();
+        void setCoursePtr(Course* new_course_ptr);
+
+        bool getPrefixFlag();
+        void setPrefixFlag(bool new_flag_val);
+
+};
+#endif //TRIENODE_H__

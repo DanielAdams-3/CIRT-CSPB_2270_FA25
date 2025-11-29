@@ -25,7 +25,7 @@ int main() {
     }
 
     std::cout << "Starting trie HTTP server on http://localhost:8080\n";
-    std::cout << "Open: http://localhost:8080/index.html\n";
+    std::cout << "Open: http://localhost:8080/index.html\n"; 
 
     // Start the HTTP server (blocking call)
     start_trie_server(dict);

@@ -48,14 +48,12 @@ void start_trie_server(Trie& dict) {
             course_to_print->getCourseInfo(courseTitle, courseDescription, courseNotes, subject, regRestricts, plansNreqs, courseHours, skillsLearnt);
             string newline="\n";
             string border="------------------------";
-            body.append(newline);
-            body.append("COURSE TITLE");
-            body.append(newline);
+            body.append(" - ");
             body.append(courseTitle);
             body.append(newline);
             body.append(border);
             body.append(newline);
-            body.append("DESCRIPTION");
+            body.append("COURSE DESCRIPTION");
             body.append(newline);
             body.append(courseDescription);
             body.append(newline);
@@ -132,8 +130,20 @@ void start_trie_server(Trie& dict) {
         auto suggestions = dict.autocomplete(prefix, limit);
 
         string body="";
+        body.append("CIRT's AutoComplete Suggestions for: ");
+        body.append("\"");
+        body.append(prefix);
+        body.append("\"");
+        body.append("\n");
+        body.append("\n");
         for (const auto& w : suggestions) {
+            //get course
+            Course* coursePTR=dict.swapCodeforPtr(w);
+            string title=coursePTR->getCourseTitle();
+            body += "-> ";
             body += w;
+            body += " ";
+            body += title;
             body += "\n";
         }
 
