@@ -8,13 +8,19 @@ The project must be submitted by December 4 at 11:59pm MT.
 Project must include a README or other project description, and/or a video walkthrough/explanation.
 ## Project Summary
 Create a course information retrieval tool (CIRT), based on a trie (prefix tree) data structure.
-The project will output course information based on a user- provided input string (course subject code).
+The project will output course information based on a user-provided input string (course subject code).
 ## Project Goals
-The goal is to create a rapid retrieval tool for pre-consolidated course information. CIRT will use a trie data structure, allowing a user to quickly access a comprehensive set of course information with one interface and limited interactions. The trie will store key-value pairs, where the key is the course subject code (e.g., CSCI-5981) and the value stored at the relevant terminating node will be a Course object containing the stored course information. CIRT should quickly output the course information for the course matching the user-provided subject code. If the course does not exist, the program will notify the user of the failed search.
+The goal is to create a rapid retrieval tool for pre-consolidated course information. CIRT will use a trie data structure, allowing a user to quickly access a comprehensive set of course information with one interface and limited required interactions. The prefix tree will be built and then available to be searched by the user. Trie leaf nodes will store a pointer to a Course object which will contain the stored course information. CIRT should quickly output the course information for the course matching the user-provided subject code. If the course does not exist, the program will notify the user of the failed search.
 ## About Tries (Prefix Trees)
-A trie is a multi-pronged tree made up of nodes, each of which represents a string character and points to as few as zero child nodes and may point to more than two child nodes, unlike a binary tree whose nodes point to at most two child nodes. The traversal path, like a HuƯman tree, represents the key to each key-value pair, formed by concatenating the string characters, stored in each node on the path, except the leaf node which points to a Course object. When a new course is added to the trie, new nodes are only created for the key’s string characters that differ from the existing keys. When a key is removed, the trie only deletes the nodes that are unique to the to-be-removed key. Each node will also contain metadata about the number of courses in the node’s subtree and a list of those courses to aid in search and insertion functions.
+A trie is a multi-pronged tree made up of nodes, each of which represents a string character and points to as few as zero child nodes and may point to more than two child nodes. This differs from binary trees whose nodes point to, at most, two child nodes. The traversal path, reminiscent of a Huffman tree, represents the full course subject code (ex: CSCI-5981). The full subject code could be formed by concatenating the string characters, represented by the index that the Node occupies in its predecessor's vector of child nodes. Each node has a vector pre-initialized with the number of possible characters that could be used (ex: 26 for each letter of the English alphabet). To indicate a node represents "C", for example, it would occupy index 2 of its predecessors' vector. 
+When a new course is added to the trie, new nodes are only created for the key’s string characters that differ from the existing keys. When a key is removed, the trie only deletes the nodes that are unique to the to-be-removed key. The trie contains metadata about the number of courses in the tree.
+Due to the storage method, search, insertion, and removal have a complexity of O(N), where N is the length of the subject code. Since these codes are only 9 characters in length, the actual execution time is short. The Prefix Tree is only built once and remains active until the user closes the program. The only action taken by the user is Search & AutoComplete (modified search). Remove Node in my implementation does not delete the nodes, but it unmarks leaf nodes and reassigns the leaf node's Course pointer variable to nullptr. Node deletion is only done in tree deconstruction to reallocate dynamic memory.
+Autocomplete using a prefix is a key feature of tries. Because we use prefix trees to store strings, we can provide a list of suggestions based on the leaf nodes in a given sub-tree. We just use a modified version of the Search function. If the user-provided string results in no results due to a character mismatch, we return no results. If the user-provided string has no remaining characters to read but we are still able to traverse the tree, we return a list of suggestions, consisting of all the leaf nodes in the sub-tree formed by the internal node we are currently at.
+
 ## CIRT Implementation
-My implementation of a Trie is built on 4 components.
+My implementation of a Trie is built on the following file and data structures.
+#### test_cirt_data.csv
+  This is the dataset I created and formatted for this task.
 ### Class - Course
   #### private:
     string courseSubjectCode;
@@ -30,7 +36,7 @@ My implementation of a Trie is built on 4 components.
     map<string, string> plansNreqs;
     void getCourseInfo(string& title, string& description, string& notes, string& subjectCode, string& restricts, map<string,string>& plansandreqs, string& numHours, string& SkillsLearnt);
     void setCourseInfo(string new_title, string new_description, string new_notes, string new_subjectCode, string new_restricts, string new_plans, string num_hours, string newSkillsLearnt);
-    NOTE - The setter and getter functions also have companion setter/getters for each individual variable which simplifies various assignments and string parsing tasks.
+    //NOTE - The setter and getter functions also have companion setter/getters for each individual variable which simplifies various assignments and string parsing tasks.
     map<string, string> getPlansAndReqs();
     string getCreditHours();
     string getSkillsLearnt();
@@ -62,7 +68,7 @@ My implementation of a Trie is built on 4 components.
   #### private:
     int numWords; //number of courses in the subtree
     TrieNode* root;
-    bool userStatus;
+    bool userStatus; //used in command-line output
 
   #### public:
     Trie(); //constructor
@@ -83,7 +89,7 @@ My implementation of a Trie is built on 4 components.
     vector<Course*> startsWithPrefix(string prefix);
     void prefixFinder(TrieNode* currentNode, vector<TrieNode*>& searchForMatches);
     Course* swapCodeforPtr(string course_subject_code);
-    NOTE: The following functions were used in an earlier version of output through a Command-Line Interface
+    //NOTE: The following functions were used in an earlier version of output through a Command-Line Interface
     void outputCourseData(string course_subject_code);
     void getUserInput();
     void setUserStatus(bool new_status);
@@ -96,11 +102,8 @@ Thanks to Prof. Guinn, I have a series of related files that host a simple front
     void start_trie_server(Trie& dict);
   #### server_main.cpp
   #### httplib.h
-    //Copyright (c) 2025 Yuji Hirose. All rights reserved.
-    //  MIT License
+    //Copyright (c) 2025 Yuji Hirose. All rights reserved. MIT License
   #### index.html
-### test_cirt_data.csv
-  This is the dataset I created and formatted for this task.
 
 ## Technical/Learning Hurdles
 I needed to learn how to implement a trie in C++, as this was not covered in a homework assignment. I also needed to learn how to implement file streams to read the pre-consolidated course information from a .csv file, which required me to learn a great deal about parsing strings. Finally, I need to learn how to create my own repository in GitHub and how to structure the project’s files so they ‘build’ like our homework assignments. I will, as part of this, need to build a few test cases to verify correct construction of the trie, Course objects, and any related functions.
@@ -129,52 +132,53 @@ I needed to learn how to implement a trie in C++, as this was not covered in a h
   
 ## Challenges & Errors (and their Resolutions)
 ### Procedure
-The first issue that has been troublesome was procedural. Because I did not physically map the relationship between the Node and the Course classes more clearly during ideation and planning phases, I ended up with some erroneous understandings that I had to address during implementation. This led to taking an extra few hours collectively to correct various errors and remove superfluous functions and data members. For example, when I first created the Nodes, i thought the course was initially going tob e directly stored in the leaf nodes. However, this would have made the nodes bloated and more difficult to separate the ndoes from the courses when i read in data from the file. So I separated it out and the final structure is much cleaner and easie to understand but was hard at first.
+The first issue that I experienced was procedural. I did not physically map the relationship between the Node and the Course classes clearly during ideation and planning, which resulted in erroneous understandings that I had to address during implementation. I corrected various logic errors in function calls and parameters, and removed superfluous functions and data members. For example, when I first created the Nodes, I thought the course was initially going to be directly stored in the leaf nodes. However, this would have made the nodes bloated and more difficult to read in data from the /csv file, so I separated course information into a separate class. The final structure is much cleaner and easie to understand.
 ### String Manipulation
-As with previous assignments, there was some difficulty in reading in string data from a file but thanks to the cpp documentation I will list in the resources, this issue was relatively quickly resolved. I also addressed this by doing data preparation beforehand. Since many strings in the course descriptions and coures notes contain commas relying on comma-separated values alone to distinguish values we read in from the csv file, I added a '*' character at the end of each data value to facilitate easier reading.
+As with previous assignments, there was some difficulty in reading in string data from a file. Thanks to the cpp documentation on the cpp website (see resources), these syntax errors were resolved. I also addressed this by doing data preparation beforehand in the csv file. Since many strings in the course descriptions and coures notes contain commas, I could not rely on comma-separated values alone to distinguish values in each cell. I added a '*' character at the end of each data value to facilitate easier reading. A tab-separated file may have sufficiently resolved this as well.
 ### Trie Implementation Notes
 #### Node Insertion Logic Error
-When implementing the trie, I  initially made a logic error. When first building the prefix tree, the trie was storing all new nodes in the root's descendants vector. After first node insertion, the root's descendants vector stored one trieNode* for each character in the first string. The issue occured during the second course insertion. Because both courses shared the same subject code ('CSCI'), the root's descendants vector could not be added to the tree because there was no space for it to be added (since no new levels were being added to the tree). I fixed this by adding a line to update the cursor value to the appropriate descedant of the current vector when there was not a nullptr in that index.
+When implementing the trie, I  initially made a logic error. When first building the prefix tree, the trie was storing all new nodes in the root's descendants vector. After first node insertion, the root's descendants vector stored one trieNode* for each character in the first string. The issue occured during the second course insertion. Because both courses shared the same subject code ("CSCI"), the root's descendants vector could not be added to the tree. There was no space for it to be added because no new levels were being added to the tree. I fixed this by adding a line in the insert function to update the cursor value to the appropriate descedant of the current vector when there was not a nullptr in that index.
 #### Unnecessary Helper Function
-During initial implementation, I created a 'helper' function to create a new Course* whenever I reached a leaf node, called createCourse(...). This function would create a new course object, populate it with the relevant data we had read from the .csv file, and would add a pointer to the course object for the leaf node. While I thought it would be helpful, I was just creating an alternate constructor with parameters for Course() that just combined it with the setter function for Course(). I removed it.  So I removed it. 
+During initial implementation, I created a helper function to create a new Course object whenever I reached a leaf node, called createCourse(...). This function would create and popoulate a Course object with the relevant data read from the .csv file. It would also add a pointer to the course object and assign it in the leaf node. While I thought it would be helpful, this endd up creating an alternate constructor with parameters for Course(). Since this added some confusion and was not necessary, I removed it. 
 #### Dynamic Memory Allocation & Trie() deconstruction
-I decided to not dynamically allocated the trie() but to dynamically allocate the nodes and the Course objects. During Trie deconstruction, I addressed deletion of the dynamically allocated memory by creating a bool data member for each trieNode called to_delete. This functions similarly to the visited bool variable/flag that one might find in certain versions of Breadth-First Searches in graphs. So this let me not ultimately re-attempt to delete eahc node because that was resuitlng in double free errors.it works!
-#### Bad Design - unnecessary deletion in removeNode()
-When I was writing the function to delete nodes, I made a bad design decision. I had the removeNode() function delete all nodes related to a course when removing it from the Trie (that is to say, after deleting a leaf node for the doom course, we would travel up to the Predecessor node and, if its only descendant was the doom leaf node, we would delete that internal node as well). The documentation I was referring to (see below) suggested that it may be better to simply mark the leaf node as a non-Leaf, point the Course object pointer to nullptr, and stop there. I took the advice and did so, relying on the deconstructor to handle node deletion.
-#### Maintaining a data member instead of Writing a New Function
-Originally, I planned to add a search function that calculated the number of Course pointers in the Trie, but decided to wait because it was complicated to do early in the project. I made a good decision to delay implementation of the getNumWords() function because when I re-visited the topic, I realized it would be very easy to create a private data member for Trie to track this value. So I created an int numWords variable in the Trie class, added a setter and getter function pair, and had the Trie increment the value when courses were added and decremented the value when a course was removed.
+I decided to not dynamically allocated the trie() but to dynamically allocate the nodes and the Course objects. During Trie deconstruction, I addressed deletion of the dynamically allocated nodes by creating a bool data member for each trieNode, to_delete. This functions similarly to the visited bool variable/flag that one might find in certain versions of Breadth-First-Search for graphs, because it let me know which nodes I had 'visited' and marked for deletion. Without the bool, it would be very easy to attempt to free the memory twice for a given node.
+#### Bad Design - Unnecessary Deletion in removeNode()
+When I was writing the function to delete nodes, I made a bad design decision. I had the removeNode() function delete all nodes related to a course when removing it from the trie. After deleting a leaf node for the doom course, I would travel up to the dooom node's predecessor and if there was only one descendant (the leaf node), I would delete that internal node as well. The documentation I was referring to (see references) suggested that it was also acceptable to simply mark the leaf node as a non-leaf, reassign the node's Course* pointer to nullptr, and stop. I took the advice and did so. As noted previously, I decided to rely on the deconstructor to handle node deletion.
+#### Maintaining a Data Member instead of Writing a New Function
+Originally, I planned to add an internal search function that calculated the number of Course pointers in the trie. I decided to wait to implement this function because it was complicated to do before I had finished implementing the structure of the trie. When I re-visited the topic, I realized it would be very easy to create a private data member for trie objects to track this value. I created an int numWords variable in the Trie class, added a setter and getter function pair, and had the InsertNode and RemoveNode functions update the value accordingly.
 ### Prefix Autocomplete
-As noted above, prefix autocomplete is a critical benefit of the Prefix Tree. In working to implement autocomplete, I found that that after calling autocomplete once,  calls yielded no results after the first call. Since multiple calls in a given 'session' is part of the desired functionality, I needed to debug this issue. The issue was simply that my method of tracking nodes I had 'searched' for possible Course matches, relied on a bool variable for prefix searches. If the flag was true, we had already visited it and it wouldn't be searched for a course match. 
-However, after the first call, the flags were never reset because the tree was still active. So I added a simple line at the end of the search where each visited node was marked as 'false' and could be visited again.
+As noted above, prefix autocomplete is a critical benefit of the Prefix Tree. In working to implement autocomplete, I found that after calling autocomplete once, subsequent calls yielded no results. Since multiple calls in a given 'session' is part of the desired functionality, I needed to debug this issue. The issue was simply that my method of tracking nodes I had 'searched' for possible Course matches relied on a bool variable. If the flag was true, we had already visited it and it would not be searched for a course match. However, after the first call to autocomplete, the flags were never reset because the tree was still active and had not been deconstructed and rebuilt. I resolved this by adding a line at the end of the autocomplete search to mark each visited node as un-visited so future searches could visit them.
 ### Custom Class Capitalization
 I updated the class capitalization to match what Prof. Guinn shared was more in alignment with industry expectations:
--trie() to Trie()
--trieNode() to TrieNode()
+  trie() to Trie()
+  trieNode() to TrieNode()
 ### Web UI Implementation
-I worked with Prof. Guinn to get some files and general instructions to implement a Web UI for the user interface. 
+I worked with Prof. Guinn to identify some libraries and general instructions to implement a Web UI for the user interface. 
 #### Compilation Commands
 The first mistake was that I did not include all of my project's .cpp files in the command to compile the project. Once I did so, the project files compiled.
-The second mistake was trying to figure out why the -O2 flag command in this command line was not working. 
+The second issue was related to the -O2 flag command in this command line:
   g++ -std=c++17 <strong>-O2</strong> server_main.cpp trie_server.cpp Trie.cpp TrieNode.cpp Course.cpp-o trie_server
-I ultimately removed it, my basic web searching suggested that some versions of the VS code compiler struggle with the flag. 
+I ultimately removed it because it was preventing basic compilation. My basic web searching suggests that the VS Code IDE can struggle with that flag, depending on the version used.
 #### File Pathing Variations
 After finishing my own test cases, I started working on the file pathing for the web UI commands but I kept receiving this error message when I tried to run the web UI.
   ->file not open<-
   Starting trie HTTP server on http://localhost:8080
   Open: http://localhost:8080/index.html
-Despite my test suite being able to access the file using "./code/static/test_cirt_data.csv", the server files could not open it using that filename. After attempting several iterations, the server file needed just the csv's file name without the pathing directions because it was in the same folder as the trie_server executable. So I updated my buildTrie() command to accept a string parameter with the filename, letting me use the path-containing string for my test suite and then the path-less string for the server file. This also put buildTrie() more in alignment with the commmand.
+Despite my test suite being able to access the file using "./code/static/test_cirt_data.csv", the server files could not open it using that filename. After attempting several iterations, the server file needed just the csv's file name without the pathing directions because it was in the same folder as the trie_server executable.
+So I updated my buildTrie() command to accept a string parameter with the filename, letting me use the path-containing string for my test suite and then the path-less string for the server file. This also made the buildTrie() function in the Trie class more flexible.
 #### Network Issues
-Thanks to Prof. Guinn, he resolved a network issue that resolved a loookup error message anytime I tried to run searches using the html page: "Request failed: TypeError: NetworkError when attempting to fetch resource."
+Thanks to Prof. Guinn, he resolved a network issue that resolved a loookup error message anytime I tried to run searches using the html page: "Request failed: TypeError: NetworkError when attempting to fetch resource." This required me to use a different locally hosted URL for the web UI since the program uses JupyterHub as a proxy server.
 ### Command-Line Interface Output
-The first attempt at the project relied on a Command-Line interface. The following were some errors I worked through for that version of the implementation.
+The first attempt at the project relied on a Command-Line Interface. The following were relevant errors I resolved for that version of the output.
 #### Stripping Whitespace, Data Preprocessing
-I encontered a series of issues with string input and output but they were relatively simple to resolve. These were, admittedly, primarily due to lack of familiarity with stringstream manipulation and the <iomanip> library. After a couple of hours fixing bugs related to output (e.g., removing whitespace from the beginning and end of strings) the output started to consistently work as expected to the console.
+I encontered a series of issues with string input and output but they were relatively simple to resolve. These were the result of my lack of familiarity with stringstream manipulation and the <iomanip> library. After a couple of hours fixing bugs related to output (e.g., removing whitespace from the beginning and end of strings) the output started to consistently work as expected to the console.
 #### Word Wrapping
-Word wrapping was a challenge. The issue was identifying how to best calculate the conditions for when we should insert a newline into the stringstream that would ultimately be stored in string and then output to the console. At first, I tried to directly compare the line width with a counter, but this resulted in a generally consistent output but did not stop certain lines from exceeding the line width parameter. I resolved the issue by calculating a 'gap_to_end' variable and if the distance to the end of the current line was smaller than the length of the next word, the function inserts a newline character to the string stream. This resolved the issue.
+Word wrapping was a challenge. The primary issue was identifying how to best calculate the conditions for when to insert a newline into the stringstream so it would appear in output appropriately. At first, I tried to directly compare the line width of each line with a counter, but this resulted in a generally consistent output that often exceeded the intended line width parameter.
+I resolved the issue by calculating a gap_to_end int variable. If the distance to the end of the current line was smaller than the length of the next word, the function inserted a newline character to the string stream. 
 
 ## Future Work
 The following are areas of improvement that could improve the project.
 ### Section-Differentiated Courses
-A challenge in implementing the trie is the (rare) circumstance where multiple courses share a course title. For example, Special Topics courses share a subject code but have unique section-level titles. I plan to address this by adding Course object pointers to the Special Topics node for each section. In initial implementation, CIRT will output all course data for each Special Topics section upon request. Time permitting, I will ask the user for input to isolate the desired section title and then output only the relevant section’s information.
+A challenge in implementing the trie is the (rare) circumstance where multiple courses share a course title. For example, Special Topics courses (CSCI-7000) share a subject code but have unique section-level titles. I would plan to address this by adding Course object pointers to the Special Topics node for each section. In initial implementation, CIRT would output all course data for each Special Topics section upon request. Then I would ask the user for input to isolate the desired section title and then output only the relevant section’s information.
 ### Search-by-Title / Partial Title Option
-I hope to be able to add a search-by-title option. Instead of remaking a new trie, I would, within the trie structure, contain a 'dictionary' map structure where each course is added to the map, where the keys are the Course titles and the values are the subject codes. Then when the user provided the course title, I would search the map for a key, and if it existed, then call the search and output functions based on the 'value' of the found key:value pair, the course subject code.
+I was unable to add a search-by-title option. Instead of remaking a new trie, I would, within the trie structure, contain a 'dictionary' map structure where each course is added to the map, where the keys are the course titles and the values are the subject codes. Then when the user provided the course title, I would search the map for a key, and if it existed, then call the search and output functions based on the associated value, the course subject code.
