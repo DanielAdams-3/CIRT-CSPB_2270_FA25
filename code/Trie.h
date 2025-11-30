@@ -10,47 +10,50 @@ class Trie{
     private:
         int numWords; //number of courses in the subtree
         TrieNode* root; //root of the tree;
-        bool userStatus;
+        //bool userStatus; 
 
     public:
         Trie(); //constructor
         ~Trie(); //destructor
-        void treeDeleter(TrieNode* subtreeRoot, vector<TrieNode*>& to_delete);
-        
+
         void setRoot(TrieNode* new_root);
         TrieNode* getRoot(); //returns a pointer to the node parameter;
-
         void setNumWords(int new_val); //returns the number of courses in the Trie
         int getNumWords();
 
-        //set up the string streams and prep the data to be read
-        vector<Course*> readData(string file_name);
+        //helper function to deallocate memory called by the destructor function
+        void treeDeleter(TrieNode* subtreeRoot, vector<TrieNode*>& to_delete);
 
-        //search/traversal function to help with insert_node as well
+
+
+        //search/traversal function
         bool searchTrie(string course_to_find);
-        //load calls SearchTrie to save me time.
+        //server-specific function call - calls searchTrie;
         bool contains(string word);
 
         //this function creates and inserts a new node into the tree in the tree
         //if the searchTrie(string course_to_find) function returns false
-        void insertNode(Course* course_to_add); //be sure to call searchTrie
+        void insertNode(Course* course_to_add); //calls searchTrie
         void removeNode(string doom_course_subject_code); 
 
-        //we build the Trie as we read data from csv fstream
+        
+        //buildTrie() calls readData we read data from csv fstream
         //once this is done, we will be able to interact with the user
         void buildTrie(string filename); 
+        //set up the string streams and prep the data to be read
+        vector<Course*> readData(string file_name);
         //helper function for the server output
         bool load(const string& filename);
         //load is what we're doing to replace buildTrie();
 
-        //this is to help us with output to the server. I don't call this in my output
+        //server-specific function call - calls startsWithPrefix
         vector<string> autocomplete(const string& prefix, size_t max_results);
         //auto-complete options let's the user pass in a prefix that is less than or equal to the length of every course subject code.
         vector<Course*> startsWithPrefix(string prefix);
-        //helper function for auto-complete
+        //recursive helper function for startsWithPrefix;
         void prefixFinder(TrieNode* currentNode, vector<TrieNode*>& searchForMatches);
         
-        //user interaction functions
+        //CLI input and output which were replaced by server_main.cpp, trie_server.cpp/.h, httplib.h, and index.html
         void outputCourseData(string course_subject_code);
         void getUserInput();
         void setUserStatus(bool new_status);

@@ -2,27 +2,39 @@
 Daniel Adams
 CSPB 2270 Data Structures
 Fall 2025 - Prof. Guinn
-## Requirements
-This repository is for my course project.
 The project must be submitted by December 4 at 11:59pm MT.
-Project must include a README or other project description, and/or a video walkthrough/explanation.
-## Project Summary
+## About the Project
 Create a course information retrieval tool (CIRT), based on a trie (prefix tree) data structure.
 The project will output course information based on a user-provided input string (course subject code).
+## Video Summary
+//TODO
 ## Project Goals
 The goal is to create a rapid retrieval tool for pre-consolidated course information. CIRT will use a trie data structure, allowing a user to quickly access a comprehensive set of course information with one interface and limited required interactions. The prefix tree will be built and then available to be searched by the user. Trie leaf nodes will store a pointer to a Course object which will contain the stored course information. CIRT should quickly output the course information for the course matching the user-provided subject code. If the course does not exist, the program will notify the user of the failed search.
-## About Tries (Prefix Trees)
-A trie is a multi-pronged tree made up of nodes, each of which represents a string character and points to as few as zero child nodes and may point to more than two child nodes. This differs from binary trees whose nodes point to, at most, two child nodes. The traversal path, reminiscent of a Huffman tree, represents the full course subject code (ex: CSCI-5981). The full subject code could be formed by concatenating the string characters, represented by the index that the Node occupies in its predecessor's vector of child nodes. Each node has a vector pre-initialized with the number of possible characters that could be used (ex: 26 for each letter of the English alphabet). To indicate a node represents "C", for example, it would occupy index 2 of its predecessors' vector. 
-When a new course is added to the trie, new nodes are only created for the key’s string characters that differ from the existing keys. When a key is removed, the trie only deletes the nodes that are unique to the to-be-removed key. The trie contains metadata about the number of courses in the tree.
-Due to the storage method, search, insertion, and removal have a complexity of O(N), where N is the length of the subject code. Since these codes are only 9 characters in length, the actual execution time is short. The Prefix Tree is only built once and remains active until the user closes the program. The only action taken by the user is Search & AutoComplete (modified search). Remove Node in my implementation does not delete the nodes, but it unmarks leaf nodes and reassigns the leaf node's Course pointer variable to nullptr. Node deletion is only done in tree deconstruction to reallocate dynamic memory.
+## Data Structure - Tries (Prefix Trees)
+A trie is a tree made up of nodes, each of which represents a string character and points to as few as zero child nodes and may point to more than two child nodes. Each node has a vector pre-initialized with the number of possible characters that could be used (ex: 26 for each letter of the English alphabet). To indicate a node represents "C", for example, it would occupy index 2 of its predecessors' vector. This differs from binary trees whose nodes point to, at most, two child nodes. The traversal path, reminiscent of a Huffman tree, represents the full course subject code (ex: CSCI-5981) in this trie.
+When a new course is added to the trie, new nodes are only created for the course's string characters that differ from the existing courses. When a course is removed, the trie would only need to delete the nodes that are unique to the to-be-removed course. This implementation instead un-marks the doom course's leaf node so it's no longer considered a leaf, reassigns the Course pointer to nullptr, and decrements the count of courses in the trie, which is tracked internally. Node deletion in this implementation are only done in tree deconstruction to reallocate dynamic memory.
+Due to the storage method, search, insertion, autocomplete, and removal have a complexity of O(N), where N is the length of the subject code. Since these codes are only 9 characters in length, the actual execution time is short. 
 Autocomplete using a prefix is a key feature of tries. Because we use prefix trees to store strings, we can provide a list of suggestions based on the leaf nodes in a given sub-tree. We just use a modified version of the Search function. If the user-provided string results in no results due to a character mismatch, we return no results. If the user-provided string has no remaining characters to read but we are still able to traverse the tree, we return a list of suggestions, consisting of all the leaf nodes in the sub-tree formed by the internal node we are currently at.
+The trie is only built once and remains active until the user closes the program. The only actions taken by the user are Search & AutoComplete (modified search).
+
+## Running the Demo - Instructions
+#### 1. Download the repo
+#### 2. Navigate to the ./code folder
+#### 3. Run this command in the terminal:
+##### g++ -std=c++17 server_main.cpp trie_server.cpp TrieNode.cpp Trie.cpp Course.cpp  -o trie_server
+#### 4. Once it compiles, run this command in the terminal
+##### ./trie_server 
+#### 5. If the server runs as expected, copy the provided hyperlink
+##### IMPORTANT - replace the phrase in <> (<daad2295>) with the identifier you use for JupyterLab
+#### 6. Paste the edited hyperlink into a new tab and go
+#### 7. Page should be active and you can use the Search and Autocomplete functions as described
 
 ## CIRT Implementation
 My implementation of a Trie is built on the following file and data structures.
-#### test_cirt_data.csv
+### test_cirt_data.csv
   This is the dataset I created and formatted for this task.
-### Class - Course
-  #### private:
+### Course
+  ##### private:
     string courseSubjectCode;
     string courseDescription;
     string courseNotes;
@@ -30,7 +42,7 @@ My implementation of a Trie is built on the following file and data structures.
     string regRestricts; 
     string courseHours;
     string skillsLearnt;
-  #### public:
+  ##### public:
     Course();
     ~Course();
     map<string, string> plansNreqs;
@@ -41,15 +53,14 @@ My implementation of a Trie is built on the following file and data structures.
     string getCreditHours();
     string getSkillsLearnt();
 
-### Class - TrieNode
-  #### private:
+### TrieNode
+  ##### private:
     TrieNode* predecessor;
     bool isLeaf; //true only when we reach the end of the course subject code
     Course* coursePtr; //for leaf node's only, to point at a dynamically allocated course object
     bool to_delete;
-    bool prefix_finder;
-        
-  #### public:
+    bool prefix_finder;  
+  ##### public:
     vector<TrieNode*> descendants;
     TrieNode();
     ~TrieNode();
@@ -64,13 +75,12 @@ My implementation of a Trie is built on the following file and data structures.
     bool getPrefixFlag();
     void setPrefixFlag(bool new_flag_val);
 
-### Class - Trie
-  #### private:
+### Trie
+  ##### private:
     int numWords; //number of courses in the subtree
     TrieNode* root;
     bool userStatus; //used in command-line output
-
-  #### public:
+  ##### public:
     Trie(); //constructor
     ~Trie(); //destructor
     void treeDeleter(TrieNode* subtreeRoot, vector<TrieNode*>& to_delete);
@@ -105,8 +115,6 @@ Thanks to Prof. Guinn, I have a series of related files that host a simple front
     //Copyright (c) 2025 Yuji Hirose. All rights reserved. MIT License
   #### index.html
 
-## Technical/Learning Hurdles
-I needed to learn how to implement a trie in C++, as this was not covered in a homework assignment. I also needed to learn how to implement file streams to read the pre-consolidated course information from a .csv file, which required me to learn a great deal about parsing strings. Finally, I need to learn how to create my own repository in GitHub and how to structure the project’s files so they ‘build’ like our homework assignments. I will, as part of this, need to build a few test cases to verify correct construction of the trie, Course objects, and any related functions.
 ### References & Resources
   #### zyBook CSPB 2270: Data Structures - 7.12 Tries
   #### zyBook CSPB 2270: C++ Refresher - 9.5, 9.6, 9.7 File input and output
@@ -180,5 +188,5 @@ I resolved the issue by calculating a gap_to_end int variable. If the distance t
 The following are areas of improvement that could improve the project.
 ### Section-Differentiated Courses
 A challenge in implementing the trie is the (rare) circumstance where multiple courses share a course title. For example, Special Topics courses (CSCI-7000) share a subject code but have unique section-level titles. I would plan to address this by adding Course object pointers to the Special Topics node for each section. In initial implementation, CIRT would output all course data for each Special Topics section upon request. Then I would ask the user for input to isolate the desired section title and then output only the relevant section’s information.
-### Search-by-Title / Partial Title Option
+### Search-by-(Partial)-Title Option
 I was unable to add a search-by-title option. Instead of remaking a new trie, I would, within the trie structure, contain a 'dictionary' map structure where each course is added to the map, where the keys are the course titles and the values are the subject codes. Then when the user provided the course title, I would search the map for a key, and if it existed, then call the search and output functions based on the associated value, the course subject code.

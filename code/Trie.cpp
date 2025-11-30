@@ -8,7 +8,7 @@ Trie::Trie()
     this->numWords=0;
     TrieNode* root= new TrieNode();
     this->setRoot(root);
-    this->userStatus=false;
+    //this->userStatus=false;
 } 
 
 //destructor
@@ -372,8 +372,6 @@ bool Trie::load(const string& filename)
 
 void Trie::buildTrie(string filename)
 {
-    //string filename = "../static/test_cirt_data.csv"; not working
-    //string filename = "code/static/test_cirt_data.csv"; //not orking
     //string filename = "../code/static/test_cirt_data.csv"; //ONLY WORKS FOR MY TEST
     vector<Course*> new_courses = readData(filename);
 
@@ -468,6 +466,8 @@ void Trie::prefixFinder(TrieNode* currentNode, vector<TrieNode*>& searchForMatch
     }
 }
 
+
+//given a subject code, it searches the trie to return the corresponding course*
 Course* Trie::swapCodeforPtr(string course_subject_code)
 {
     Course* answer = nullptr;
@@ -651,11 +651,13 @@ string Trie::consoleOutputWordWrapping(string to_word_wrap, const int WIDTH_OF_L
 
 void Trie::setUserStatus(bool new_status)
 {
-    this->userStatus=new_status;
+    //this->userStatus=new_status;
 }
+
 bool Trie::getUserStatus()
 {
-    return this->userStatus;
+    //return this->userStatus;
+    return false;
 }
 
 //this may just be the main.cpp function below, not sure we need this function as part of the Trie();

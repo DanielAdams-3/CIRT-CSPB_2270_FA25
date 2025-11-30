@@ -13,7 +13,7 @@ class TrieNode {
         bool prefix_finder;
         
     public:
-        vector<TrieNode*> descendants; //27 characters long, index 0 = '-' and rest are all capitals
+        vector<TrieNode*> descendants; //37 characters long, A-Z, 0-9, "-"
 
         TrieNode(); //constructor
         ~TrieNode(); //destructor
