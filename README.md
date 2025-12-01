@@ -31,60 +31,70 @@ If the user-provided string results in no results due to a character mismatch, w
 
 #### Time & Space Complexity
 Due to how the data is stored and how the tree is traversed, search, insertion, autocomplete, and removal have a complexity of O(N), where N is the length of the subject code.
-Furthermore, teh actual execution time is short because the cours subject codes used are only 9 characters in length and insertion only happens when the trie is built. 
-THe only two functions used repeatedly by the user are Search and AutoComplete which are very efficient.
+Furthermore, the actual execution time is short because the cours subject codes used are only 9 characters in length and insertion only happens when the trie is built. 
+The only two functions used repeatedly by the user are Search and AutoComplete which are very efficient. Deletion only occurs when the trie is deconstructed upon program closure, and the inefficiencies are minimized and the user experience is not directly affected. As noted by GeeksforGeeks, "The main disadvantage of the trie is that it takes a lot of memory to store all the strings. For each node, we have too many node pointers which are equal to the no of characters in the worst case.". 
 
-//TODO-ADD TABLE
-Operation	Complexity // Here n is the length of string to be searched
-Insertion	O(n)  // O(n) Time and O(1) Space
-Searching	O(n) // O(n) Time and O(1) Space
-Deletion	O(n) // O(n) where n is the key length, and O(n*m) where n is the key length of the longest word and m is the total number of words
-AutoComplete (Prefix Search) // O(n) Time and O(1) Space
+| Trie Operation | Time Complexity | Space Complexity |
+| -------------  | -------------   | ---------------  |
+| Insertion      | O(N)            | O(1)             |
+| Deletion       | O(N)            | O(m*k)           |
+| Search         | O(N)            | O(1)             |
+| Prefix Search  | O(N)            | O(1)             |
+  AutoComplete
+*n = length of string searched/inserted/removed
+**m = key length of longest word
+**k = total number of words
+#### See the following for complexity references:
+##### https://learn.zybooks.com/zybook/COLORADOCSPB2270DataStructuresGuinnFall2025/chapter/7/section/12 
+##### https://www.geeksforgeeks.org/dsa/introduction-to-trie-data-structure-and-algorithm-tutorials/
+##### https://www.geeksforgeeks.org/dsa/trie-insert-and-search/
+##### https://www.geeksforgeeks.org/dsa/trie-delete/
 
-Space Complexity
-"The main disadvantage of the trie is that it takes a lot of memory to store all the strings. For each node, we have too many node pointers which are equal to the no of characters in the worst case."
-//see https://learn.zybooks.com/zybook/COLORADOCSPB2270DataStructuresGuinnFall2025/chapter/7/section/12 
-//see https://www.geeksforgeeks.org/dsa/introduction-to-trie-data-structure-and-algorithm-tutorials/
-//see https://www.geeksforgeeks.org/dsa/trie-insert-and-search/
-https://www.geeksforgeeks.org/dsa/trie-delete/
 ## File Structure
-Here is the breakdown of the repo. Check teh ./test section for information on running tests.
+Here is the breakdown of the repo. Check the ./test section for information on running tests.
 
 #### ./app
-This contains my 'app' which helped me in debugging and wtih the Command-Line Interface version of input/output that is not used in the final version. 
-If you click 'Run Apps' it will run but I do not recommend using that version.
+This contains main.cpp, which hosts the Command-Line Interface which helped me in debugging and with the Command-Line Interface version of input/output that is not used in the final version. 
+If you click 'Run Apps' it will try to run the CLI version and since there are two files with main.cpp, you need to remove either this file or follow the demo instructions as noted elsewhere to run the program as intended.
 
 #### /tests directory 
 This contains my test suite. I created unit tests for each Trie, TrieNode, and Course related function, including setter/getters, constructor and deconstructors, and each key function.
-To run the tests, simply do the same thing you did for the homeworks; I copied the template files from a homework so the test suite runs justl ike those. In VS Code, it's a debugging option you can select called <strong>Run Tests</strong>.
-NOTE - I deactivated the tests for command-line input and output because that functionality was replaced with the web UI. You can uncomment them at the end of the test_proj.cpp file if you want to run those tests.
+In order to run tests, you need to
+(1) exclude main.cpp or the server_main.cpp file. The web UI version will run if you exclude main.cpp from the app folder.
+(2) If you want to run the CLI version, uncomment the last two tests in the test_proj.cpp file.
+(3) Then proceed as you would with a homework; I copied the template files from a homework so the test suite runs justl ike those. In VS Code, it's a debugging option you can select: <strong>Run Tests</strong>.
 
 #### /code directory
 This folder holds most of the program files
 ##### /code/test_cirt_data.csv
 This is the dataset I created and formatted for this task.
-
-##### /code/trie_server.h
-//One of the files used in the web UI version of the input/output functionality
-
+##### /code/trie_server.h && /code/trie_server.cpp
+//Two of the files used in the web UI version of the input/output functionality
+These 
 ##### /code/server_main.cpp
 //One of the files used in the web UI version of the input/output functionality
-
+This file sets up and runs the server, so this serves as the 'main.cpp' file for the web UI version of input/output. Needs to be excluded or moved out of the directory in order for run_tests or for the CLI to function as expected.
 #### httplib.h
 //Copyright (c) 2025 Yuji Hirose. All rights reserved. MIT License
 //One of the files used in the web UI version of the input/output functionality
-
+//TODO
 #### index.html
+//TODO
 
-
-### Course.h & Course.cpp
-### TrieNode.h & TrieNode.cpp
-### Trie.h & Trie.cpp
+### Course.h & Course.cpp //TODO
+These are files for the Course objects that store course information.
+### TrieNode.h & TrieNode.cpp //TODO
+### Trie.h & Trie.cpp //TODO
 
 ## How It Works
-### Reading in Data
-### Building the Trie
-### 
+### Reading in Data //TODO
+The primary function that sets up the trie is
+  void trie::buildTrie(string filename);
+This function also calls
+  void trie::readData(string filename);
+
+
+### Building the Trie //TODO
 Trie leaf nodes will store a pointer to a Course object which will contain the stored course information. CIRT should quickly output the course information for the course matching the user-provided subject code. If the course does not exist, the program will notify the user of the failed search.
 
 ## Video Walkthrough
