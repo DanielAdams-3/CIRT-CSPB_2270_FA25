@@ -70,9 +70,10 @@ The only two functions used repeatedly by the user are Search and AutoComplete w
 | Deletion       | O(N)            | O(m*k)           |
 | Search         | O(N)            | O(1)             |
 | Prefix Search  | O(N)            | O(1)             |
-*n = length of string searched/inserted/removed
-**m = key length of longest word
-**k = total number of words
+
+  *n = length of string searched/inserted/removed
+  **m = key length of longest word
+  **k = total number of words
 
 #### See the following for complexity information:
 ##### https://learn.zybooks.com/zybook/COLORADOCSPB2270DataStructuresGuinnFall2025/chapter/7/section/12 
@@ -87,18 +88,16 @@ Here is the breakdown of the repo.
 This folder holds the bulk of the program files.
 ##### /code/test_cirt_data.csv
 This is the dataset I consolidated and formatted for this task. I originally tried to rely on comma-separated values but since there are commas within certain fields, I ultimately had to add '*' characters to the end of each cell to help parse each line.
-
 #### Custom Classes
-##### Course.h & Course.cpp
-These support a custom classes Course that stores course information we read in from the .csv file. One course object corresponds to one row in the .csv file.
 ##### TrieNode.h & TrieNode.cpp
 These support a custom class TrieNode. Each node contains a pointer to its predecessor, a pointer to a Course object (only used by leaf nodes), a bool value isLeaf to mark it as a leaf node, a bool value to_delete to help identify when we've visited a node that we need to dynamically deallocate, and a bool for prefix_finder so we know when we've visited a node to possibly suggest to the user for autocomplete. Each node also contains a vector of TrieNode* pointers called descendants.
+  ```
   private:
     TrieNode* predecessor;
     bool isLeaf; //true only when we reach the end of the course subject code
     Course* coursePtr; //for leaf node's only, to point at a dynamically allocated course object
     bool to_delete;
-    bool prefix_finder;   
+    bool prefix_finder;
   public:
     vector<TrieNode*> descendants; //37 characters long, A-Z, 0-9, "-"
     TrieNode(); //constructor
@@ -113,8 +112,10 @@ These support a custom class TrieNode. Each node contains a pointer to its prede
     void setCoursePtr(Course* new_course_ptr);
     bool getPrefixFlag();
     void setPrefixFlag(bool new_flag_val);
+```
 ##### Trie.h & Trie.cpp
 These support a custom class Trie. Each trie stores the number of courses in the trie and a pointer to the root of the tree. 
+  ```
   private:
     int numWords; //number of courses in the subtree
     TrieNode* root; //root of the tree;
@@ -128,7 +129,7 @@ These support a custom class Trie. Each trie stores the number of courses in the
     TrieNode* getRoot(); //returns a pointer to the root node;
     void setNumWords(int new_val); 
     int getNumWords(); //returns the number of courses in the Trie
-
+    
     bool searchTrie(string course_to_find); //search/traversal function
     bool contains(string word); //calls searchTrie so it works with the trie_server files.
 
@@ -144,13 +145,55 @@ These support a custom class Trie. Each trie stores the number of courses in the
     void prefixFinder(TrieNode* currentNode, vector<TrieNode*>& searchForMatches); //recursive helper function for startsWithPrefix;
 
     Course* swapCodeforPtr(string course_subject_code); //helper function to return a Course* for a given string subject code.
-
+    
     //the following are related to CLI and are not used with the server implementation.   
     void outputCourseData(string course_subject_code);
     void getUserInput();
     void setUserStatus(bool new_status);
     bool getUserStatus();
     string consoleOutputWordWrapping(string course_subject_code, const int WIDTH_OF_LINE); ////this one returns a string that has been prepraed for Word wrapping
+   ```
+##### Course.h & Course.cpp
+These support a custom classes Course that stores course information we read in from the .csv file. One course object corresponds to one row in the .csv file.
+  ```
+    private:
+        string courseSubjectCode; //the main thing.
+        string courseDescription; //from catalog or classes.colorado.edu
+        string courseNotes; //from classes.colorado.edu
+        string courseTitle; //catalog, etc.
+        string regRestricts; 
+        string courseHours;
+        string skillsLearnt; //from 3. Skills Learnt
+
+    public:
+
+        Course(); //constructor, set variables to empty string, false and nullptr;
+        ~Course(); //destructor
+        map<string, string> plansNreqs; //from the csv
+        
+        void getCourseInfo(string& title, string& description, string& notes, string& subjectCode, string& restricts, map<string,string>& plansandreqs, string& numHours, string& SkillsLearnt);
+        string getCourseSubjectCode(); //returns the entire subject code of the course
+        string getCourseNotes(); //returns just the class notes
+        string getCourseDescription(); //returns just the course description
+        string getCourseTitle(); //return just the course title
+        string getRegRestricts(); //returns just the skills learnt
+        //returns the degree reqs as a string for given course_title. If key not found, return empty string
+        //for a given key, return the mapped value of PlansandReqs as a string
+        map<string, string> getPlansAndReqs();
+        string getCreditHours();
+        string getSkillsLearnt();
+
+        //Set by calling each individual setter function
+        void setCourseInfo(string new_title, string new_description, string new_notes, string new_subjectCode, string new_restricts, string new_plans, string num_hours, string newSkillsLearnt);
+        void setCourseNotes(string new_notes); //called by setCourseInfo;
+        void setCourseDescription(string new_description); //called by setCourseInfo;
+        void setCourseSubjectCode(string new_subj_code);//called by setCourseInfo;
+        void setCourseTitle(string new_title);//called by setCourseInfo;
+        void setRegRestricts(string new_reg_restricts);//called by setCourseInfo;
+        void setPlansandReqs(string degreePlansAndReqs); //we take in that string value and populate the map, separted by ';'
+        void setCreditHours(string num_hours);
+        void setSkillsLearnt(string new_skills)
+  ```
 #### Web UI for Input & Output
 Thanks to Prof. Guinn for his support in implementation of the web interface.
 ##### /code/trie_server.h && /code/trie_server.cpp
@@ -214,9 +257,11 @@ The second issue was related to the -O2 flag command in this command line:
 I ultimately removed it because it was preventing basic compilation. My basic web searching suggests that the VS Code IDE can struggle with that flag, depending on the version used.
 #### File Pathing Variations
 After finishing my own test cases, I started working on the file pathing for the web UI commands but I kept receiving this error message when I tried to run the web UI.
+   ```
   ->file not open<-
   Starting trie HTTP server on http://localhost:8080
   Open: http://localhost:8080/index.html
+  ```
 Despite my test suite being able to access the file using "./code/static/test_cirt_data.csv", the server files could not open it using that filename. After attempting several iterations, the server file needed just the csv's file name without the pathing directions because it was in the same folder as the trie_server executable.
 So I updated my buildTrie() command to accept a string parameter with the filename, letting me use the path-containing string for my test suite and then the path-less string for the server file. This also made the buildTrie() function in the Trie class more flexible.
 #### Network Issues
