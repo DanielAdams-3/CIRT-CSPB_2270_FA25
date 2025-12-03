@@ -37,7 +37,7 @@ Once at the web address, the user can use the tool for searches or to get autoco
 #### 4. Once it compiles, run this command in the terminal
 ##### ./trie_server 
 #### 5. If the server runs as expected, copy the provided hyperlink AND -- make the following edit:
-##### Replace the bracketed text (<daad2295>) with your appropriate JupyterHub/Lab identifier
+##### Replace the text in <> with your JupyterHub/Lab identifier
 #### 6. Paste the edited hyperlink into a new tab and press Enter
 #### 7. Page should be active and you can use the Search and Autocomplete functions as described
 
