@@ -27,7 +27,7 @@ Once the trie is built, the server will be created and is ready to be used. The 
 Once at the web address, the user can use the tool for searches or to get autocomplete suggestions.
 
 ## Video Walkthrough
-//IN PROGRESS
+(https://drive.google.com/file/d/18jLywgD2XO0GFBnMyDOKfZdJ-SGFVZS5/view?usp=sharing)
 
 ## Running the Demo - Instructions
 #### 1. Download the repo
